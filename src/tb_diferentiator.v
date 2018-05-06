@@ -1,4 +1,4 @@
-`include "diferentiatorB.v"
+`include "diferentiator.v"
 
 
 module tb_diferentiator();
@@ -21,10 +21,22 @@ module tb_diferentiator();
     d = 0;
     #5 reset = 1;
     #5 reset =0;
-      for (i=0; i< 125; i = i + 1)
+      for (i=0; i< 25; i = i + 1)
       begin
-      #5 d = d + 3;
+      #5 d = d + 1;
       end
+
+      for (i=0; i< 25; i = i + 1)
+      begin
+      #5 d = d;
+      end
+
+      for (i=0; i< 25; i = i + 1)
+      begin
+      #5 d = d - 3;
+      end
+
+
       $finish;
    end
    // Clock generator
