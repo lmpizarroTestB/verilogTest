@@ -3,7 +3,7 @@ import twoCompl as twc
 
 import matplotlib.pyplot as plt
 
-class Pulse:
+class GenPulse:
     IMAX = 0.005
     LAMBDA = 0.01
 
@@ -40,6 +40,26 @@ class Pulse:
                 np.random.random())*self.NOiSE)
 
         self.expPulse.append(0)
+
+    def differential(self):
+        t = 0
+        for i,e in enumerate(self.pulseOut):
+            self.pulseOut[i] = e - t
+            t = e
+
+    def integra(self, a1 = 0.03125 / 512.0  , a2 = 0.00391 / 1024.0 ):
+        suma = 0
+        m1 = 0
+        m2 = 0
+        for i,e in enumerate(self.pulseOut):
+            suma = int(suma + e  -  a1 * m1   +  a2 * m2)
+            self.pulseOut[i] =  suma 
+            m2 = m1
+            m1 = suma
+
+    def amplifier(self, a = .5):
+        for i,e in enumerate(self.pulseOut):
+            self.pulseOut[i] =  a * e 
 
     def calcPulseTri(self, WIDE = 500):
         N1=int(.2*WIDE)
@@ -85,18 +105,24 @@ class Pulse:
                     np.random.randint(-30,30))
 
 def main():
-    pulse = Pulse()
+    pulse = GenPulse()
     pulse.setPmtComps()
     pulse.calcConstants()
     pulse.initLists()
     #pulse.calcPulseExp()
     pulse.calcPulseTri()
     pulse.calcPmtOut()
-    pulse.calcADCOut(30)
+    pulse.calcADCOut(3)
+    #pulse.differential()
+    import copy
+    tmp = copy.copy(pulse.pulseOut)
+    #pulse.integra()
+    pulse.amplifier(1.0/256.0)
+    pulse.integra()
     tw = twc.TwoCompl(16)
-    twl = tw.toFile(pulse.pulseOut, "vector.tv")
-    print twl
+    #twl = tw.toFile(pulse.pulseOut, "vector.tv")
     plt.plot (pulse.pulseOut)
+    plt.plot (tmp)
     plt.show()
 
 if __name__ == "__main__":

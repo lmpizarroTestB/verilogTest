@@ -42,8 +42,27 @@ class TwoCompl:
             fo.write("\n")
         fo.close()
 
+    def convertString(self, s):
+        lenN = len(s) - 1
+        expMax = lenN - 1
+        print lenN
+
+
+        sign = -1
+        if s[0] == "0":
+            sign = 1
+        print sign
+        n = 1
+        exp = expMax 
+        for e in s[1:]:
+            if e == "0":
+                n = 0
+            print n,  exp
+            exp = exp - 1
+
 def main():
     tw = TwoCompl(16)
+    tw.convertString("11111")
 
 if __name__ == "__main__":
         main()
