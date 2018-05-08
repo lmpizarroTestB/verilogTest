@@ -47,12 +47,12 @@ class GenPulse:
             self.pulseOut[i] = e - t
             t = e
 
-    def integra(self, a1 = 0.03125 / 512.0  , a2 = 0.00391 / 1024.0 ):
+    def integra(self, a1 = 0.03125 / 512.0  , a2 = 0.00391 / 1024.0 , amp = 0.5):
         suma = 0
         m1 = 0
         m2 = 0
         for i,e in enumerate(self.pulseOut):
-            suma = int(suma + e  -  a1 * m1   +  a2 * m2)
+            suma = int(suma + amp * e  -  a1 * m1   +  a2 * m2)
             self.pulseOut[i] =  suma 
             m2 = m1
             m1 = suma
