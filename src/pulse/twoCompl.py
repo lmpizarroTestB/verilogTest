@@ -20,8 +20,30 @@ def two_complement_b(e):
     a = str(s) + str(bin(abs(e))[2:].zfill(14))
     print a
 
-#for e in pulseOut:
-#    a = np.binary_repr(e, 16)
-#    print a, e
+class TwoCompl:
+    def __init__(self, NBITS):
+        self.NBITS = NBITS
+        pass
 
+    def convertList(self, lst):
+        out = []
+        for e in lst:
+            a = np.binary_repr(e, self.NBITS)
+            out.append(a)
+        return out
 
+    def toFile(self,lst, filename):
+        out = self.convertList(lst)
+
+        fo = open(filename, "w")
+
+        for e in out:
+            fo.write(e)
+            fo.write("\n")
+        fo.close()
+
+def main():
+    tw = TwoCompl(16)
+
+if __name__ == "__main__":
+        main()

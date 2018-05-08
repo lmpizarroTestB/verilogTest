@@ -1,4 +1,5 @@
 import numpy as np
+import twoCompl as twc
 
 import matplotlib.pyplot as plt
 
@@ -92,6 +93,9 @@ def main():
     pulse.calcPulseTri()
     pulse.calcPmtOut()
     pulse.calcADCOut(30)
+    tw = twc.TwoCompl(16)
+    twl = tw.toFile(pulse.pulseOut, "vector.tv")
+    print twl
     plt.plot (pulse.pulseOut)
     plt.show()
 

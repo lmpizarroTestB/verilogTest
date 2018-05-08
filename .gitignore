@@ -2,4 +2,6 @@
 *.vcd
 *.pdf
 *.txt
+*.tv
+*.pyc
 
