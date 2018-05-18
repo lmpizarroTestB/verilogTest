@@ -29,7 +29,7 @@ module tb_shapeInt;
 // Initialize all variables
 initial 
   begin
-   $display ( "time, ck, clr, data, out" );
+   //$display ( "time, ck, clr, data, out" );
    $monitor ( "%g, %b, %b, %d, %d" , $time, clock, reset, data, out);
    clock = 1; // initial value of clock
    reset = 0; // initial value of reset
@@ -71,5 +71,30 @@ def main():
   fo.write(tb_gen)
   fo.close()
 
+  import subprocess
+
+  simu = subprocess.check_output(['iverilog', '-osimu', tb_file_name])
+  simu = subprocess.check_output(['./simu'])
+  
+  simu = simu.split('\n')
+  
+  out_sim = []
+  x = []
+  i = 0
+  for l in simu:
+    if len(l) > 2:
+      x.append(i)
+      da = float(l.split(',')[4].lstrip())
+      print da
+      out_sim.append(da)
+      i=i+1
+ 
+  import biggles
+ 
+  p = biggles.FramedPlot()
+  p.add( biggles.Curve(x,out_sim, color="red") )
+
+  p.show()
+ 
 if __name__ == "__main__":
   main()
