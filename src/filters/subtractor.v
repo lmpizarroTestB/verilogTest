@@ -3,9 +3,11 @@ module subtractor #(parameter Nbits = 14)
 
   input wire clk;
 
-  input wire [Nbits-1:0] x1;
-  input wire [Nbits-1:0] x2;
+  input wire signed [Nbits-1:0] x1;
+  input wire signed [Nbits-1:0] x2;
 
-  output [Nbits-1:0] y;
+  output signed [Nbits-1:0] y;
+
+  assign y = x1 - x2;
 
 endmodule
