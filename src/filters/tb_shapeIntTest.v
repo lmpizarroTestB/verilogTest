@@ -26,7 +26,7 @@ module tb_shapeInt;
 // Initialize all variables
 initial 
   begin
-   $display ( "time, ck, clr, data, out" );
+   //$display ( "time, ck, clr, data, out" );
    $monitor ( "%g, %b, %b, %d, %d" , $time, clock, reset, data, out);
    clock = 1; // initial value of clock
    reset = 0; // initial value of reset

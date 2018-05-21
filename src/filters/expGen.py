@@ -94,7 +94,8 @@ def main():
   p = biggles.FramedPlot()
   p.add( biggles.Curve(x,out_sim, color="red") )
 
-  p.show()
+  
+  p.write_img( 400, 400, "example2.png" )
  
 if __name__ == "__main__":
   main()
