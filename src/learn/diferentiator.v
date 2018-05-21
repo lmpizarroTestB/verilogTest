@@ -12,6 +12,7 @@ module diferentiator (out, in, clk, reset);
 
   reg[N-1:0] out;
 
+  reg[N-1:0] in0 = 8'b00000000;
   reg[N-1:0] xn0 = 8'b00000000;
   reg[N-1:0] xn1 = 8'b00000000;
 
