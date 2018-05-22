@@ -1,10 +1,4 @@
-import math
-
 header='''
-/* 
-Full Adder Module for bit Addition 
-Written by referencedesigner.com 
-*/
 `timescale 1ns / 100ps 
 `include "%s"
 '''
@@ -15,11 +9,9 @@ module tb_shapeInt;
   reg clock, reset;
   reg signed [N-1:0] data;
   wire signed [N-1:0] out;
-  reg signed [N-1:0] Mpos=(1<<(N-1)) - 1;
-  reg signed [N-1:0] Mneg=(1<<(N-1));
  
   shapeInt uut (
-    .C(clock),
+    .Clk(clock),
     .CLR(reset),
     .D(data),
     .Q(out)
@@ -50,6 +42,10 @@ end
 endmodule
 '''
 
+import math
+import biggles
+import subprocess
+
 def gen_signal(amp=1024, tau=.01, size=4096):
   signal =""
   for i in range(size):
@@ -71,7 +67,6 @@ def main():
   fo.write(tb_gen)
   fo.close()
 
-  import subprocess
 
   simu = subprocess.check_output(['iverilog', '-osimu', tb_file_name])
   simu = subprocess.check_output(['./simu'])
@@ -89,7 +84,6 @@ def main():
       out_sim.append(da)
       i=i+1
  
-  import biggles
  
   p = biggles.FramedPlot()
   p.add( biggles.Curve(x,out_sim, color="red") )

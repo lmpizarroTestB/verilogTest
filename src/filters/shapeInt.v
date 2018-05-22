@@ -15,7 +15,7 @@ module shapeInt #(parameter Nbits = 14)
   reg signed [Nbits-1:0] Mpos = (1<<(Nbits-1)) - 1;
   reg signed [Nbits-1:0] Mneg = (1<<(Nbits-1));
   
-  parameter b1 = 1;
+  parameter b1 = 4;
   
   reg signed [Nbits-1:0] y1 = 0;
   

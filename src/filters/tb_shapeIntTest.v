@@ -1,8 +1,4 @@
 
-/* 
-Full Adder Module for bit Addition 
-Written by referencedesigner.com 
-*/
 `timescale 1ns / 100ps 
 `include "shapeInt.v"
 
@@ -12,11 +8,9 @@ module tb_shapeInt;
   reg clock, reset;
   reg signed [N-1:0] data;
   wire signed [N-1:0] out;
-  reg signed [N-1:0] Mpos=(1<<(N-1)) - 1;
-  reg signed [N-1:0] Mneg=(1<<(N-1));
  
   shapeInt uut (
-    .C(clock),
+    .Clk(clock),
     .CLR(reset),
     .D(data),
     .Q(out)
