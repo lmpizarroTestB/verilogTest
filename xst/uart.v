@@ -78,4 +78,29 @@ output   [12:0] out;
 
 endmodule
 
+module init_counter (clk, init, rst, out);
+ input clk, init, rst;
+ output out;
 
+ always @(posedge clk or negedge init)
+
+
+endmodule
+
+module rx_byte (clk, // baud rate clock X N
+	        dr,  // data ready
+		d,   // data
+		pb,  // parity bit
+		rx   // receive line
+	       );
+
+  input clk, rx;
+  output dr, pb;
+  output [7:0] d;
+
+  always @(clk)
+  begin
+    if (rx == 0) begin
+    end
+  end
+endmodule
