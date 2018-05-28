@@ -33,3 +33,4 @@ module raminfr #(parameter NbitsAddr = 5,
   end
   assign do = ram[read_a];
 endmodule
+
