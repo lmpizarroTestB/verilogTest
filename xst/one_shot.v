@@ -45,17 +45,38 @@ reg c = 0;
 
  always @(posedge clk)
  begin
-  if (level) begin
-    if (~c) begin 
-	    pulse = 1; 
-	    c = 1; end
-      else pulse = 0;
-  end
-  else
+  if (level) 
   begin
+    if (~c) begin 
+     pulse = 1; 
+     c = 1; end
+    else pulse = 0; end
+  else begin
    c = 0;
    pulse = 0;
   end
  end
 
+endmodule
+
+module counter_8(clk, pulse, rst, load);
+input clk, rst;
+output pulse;
+input [7:0] load;
+
+reg pulse = 0;
+reg [7:0] counter = 0;
+
+always @(posedge clk)
+begin
+   if (rst) begin
+	   counter = 0;
+           pulse = 0;
+   end
+   else begin
+    counter = counter + 1;
+   if (counter == load) pulse = 1;
+   else pulse = 0;
+   end
+end
 endmodule

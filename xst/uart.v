@@ -77,7 +77,7 @@ output   [12:0] out;
  mux13 m(out, s, o);
 
 endmodule
-
+/*
 module init_counter (clk, init, rst, out);
  input clk, init, rst;
  output out;
@@ -86,7 +86,7 @@ module init_counter (clk, init, rst, out);
 
 
 endmodule
-
+*/
 module rx_byte (clk, // baud rate clock X N
 	        dr,  // data ready
 		d,   // data
@@ -104,3 +104,49 @@ module rx_byte (clk, // baud rate clock X N
     end
   end
 endmodule
+
+module counter10(clk, pulse, rst);
+input clk, rst;
+output pulse;
+
+reg pulse = 0;
+reg [3:0] counter = 0;
+
+always @(posedge clk)
+begin
+   if (rst) begin
+	   counter = 0;
+           pulse = 0;
+   end
+   else begin
+   counter = counter + 1;
+   if (counter == 10) pulse = 1;
+   else pulse = 0;
+   end
+end
+endmodule
+
+module counter20(clk, pulse, rst);
+input clk, rst;
+output pulse;
+
+reg pulse = 0;
+reg [5:0] counter = 0;
+
+always @(posedge clk)
+begin
+   if (rst) begin
+	   counter = 0;
+           pulse = 0;
+   end
+   else begin
+   counter = counter + 1;
+   if (counter == 20) pulse = 1;
+   else pulse = 0;
+   end
+end
+endmodule
+
+
+
+
