@@ -1,5 +1,16 @@
 `include "three_st.v"
 
+
+module freq_div_2 ( clk ,out );
+output reg out =0;
+input clk ;
+
+always @(posedge clk)
+begin
+     out <= ~out;	
+end
+endmodule
+
 /*
 http://vlsi-design-engineers.blogspot.com.ar/2015/09/three-state-devices-ic74x541-ic74x245.html
 */
