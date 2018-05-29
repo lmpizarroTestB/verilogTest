@@ -66,16 +66,6 @@ module ffd8z (C, D, S, Q, en);
 endmodule
 
 
-module freq_div_2 ( clk ,out );
-output reg out =0;
-input clk ;
-
-always @(posedge clk)
-begin
-     out <= ~out;	
-end
-endmodule
-
 
 //-----------------------------------------------------
 // Design Name : parity_using_assign

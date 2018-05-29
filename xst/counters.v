@@ -67,3 +67,33 @@ begin
    end
 end
 endmodule
+
+module freq_div_2 ( clk ,out );
+output reg out =0;
+input clk ;
+
+always @(posedge clk)
+begin
+     out <= ~out;	
+end
+endmodule
+
+
+
+module bit_clk ( clk ,out, rx );
+
+output out;
+input clk, rx;
+
+reg rst =0; 
+
+wire p;
+
+assign out = p & pulse;
+
+counter10 c10(clk, pulse, rst);
+freq_div_2 f2(pulse , p );
+
+endmodule
+
+

@@ -2,22 +2,24 @@
 `include "three_st.v"
 `timescale 1ns/1ps
 
-module one_shot_tb();
+
+
+module rx_tb();
 reg clk, in, rst, rx;
 reg [7:0] dur;
 integer i;
 
 wire pulse, out;
 
-counter10 DUT (clk, pulse, rst);
-freq_div_2 DUT1 (pulse, out);
+//counter10 DUT (clk, pulse, rst);
+bit_clk DUT1 (clk, out, rx);
 
   initial 
     begin
     // vcd dump
     $dumpfile("simple.vcd");
     // the variable 's' is what GTKWave will label the graphs with
-    $dumpvars(0, DUT, DUT1);
+    $dumpvars(0, DUT1);
 
       $monitor ( "time: %2g   clk: %b in: %b out: %b dur: %b, rx: %b" , $time, clk, out, pulse, rx, rst);
       rst = 1'b0;
