@@ -20,3 +20,18 @@
 [ICEZERO FPGA BOARD FOR RASPPI](https://blackmesalabs.wordpress.com/2017/02/07/icezero-fpga-board-for-rasppi/)
 
 [Static Ram](http://www-inst.eecs.berkeley.edu/~cs150/fa05/Lectures/11-SDRAMx6.pdf)
+
+
+** verilog examples
+
+[Synthesizable Verilog Code Examples](http://www.ee.bgu.ac.il/~digivlsi/slides/VerilogCodingStyle_3_2.pdf)
+
+[Synthesizable Coding of Verilog](http://www.ee.ncu.edu.tw/~jfli/vlsidi/lecture/Verilog-2012.pdf)
+
+[For Loop - VHDL and Verilog Example](https://www.nandland.com/vhdl/examples/example-for-loop.html)
+
+
+**iverilog testbench signal generation
+[Lattice Testbench Primer](https://people.ece.cornell.edu/land/courses/ece5760/Verilog/LatticeTestbenchPrimer.pdf)
+
+
