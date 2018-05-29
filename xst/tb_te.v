@@ -6,27 +6,32 @@ module ABC (clk, in, out);
 input clk, in;
 output out;
 
-reg [3:0] counter = 0;
+reg [3:0] cnt10 = 4'b0000;
+reg [4:0] cntbit = 4'b0000;
+reg [7:0] cntFrame = 8'b00000000;
 reg cd = 0; 
 
 reg outl = 1'b0;
 reg outp = 1'b0;
+reg ffbb = 1'b0;
+reg bitPulse = 1'b0;
 
-always @(negedge in)
+
+always @(negedge (in|ffbb))
  begin
    outl <= 1'b1;
  end
-
 
 always @(posedge clk)
 begin
  if (outl == 1'b1)
  begin
-   counter <= counter + 1;
-   if (counter == 4'b1001) 
+   cnt10 <= cnt10 + 1;
+   if (cnt10 == 4'b1001) 
    begin
     outl <= 1'b0;
-    counter <= 4'b0000;
+    cnt10 <= 4'b0000;
+    ffbb <= 1'b1;
    end
  end
  if (cd==1'b1) begin
@@ -41,6 +46,27 @@ begin
   cd <= 1'b1;
 end
 
+always @(posedge clk&ffbb)
+begin
+  cntFrame = cntFrame + 1;
+  if (cntFrame == 8'b11010011) begin 
+	  cntFrame <= 8'b00000000;
+	  ffbb = 1'b0;
+  end
+end
+
+
+always @(posedge (clk&ffbb))
+begin
+  cntbit = cntbit + 1;
+  if (cntbit == 5'b10100) begin 
+	  cntbit <= 5'b00000;
+	  bitPulse <= 1'b1;
+  end
+  else bitPulse <= 1'b0;
+end
+
+
 assign out = outp;
 endmodule
 
@@ -54,7 +80,6 @@ integer i;
 
 wire out;
 
-//counter10 DUT (clk, pulse, rst);
 ABC DUT1 (clk, rx, out);
 
   initial 
@@ -76,7 +101,13 @@ ABC DUT1 (clk, rx, out);
       for (i =0; i < 40; i = i + 1)
          #10 in = 0;
       #10 in = 0; rx=1;
-      for (i =0; i < 400; i = i + 1)
+      for (i =0; i < 500; i = i + 1)
+         #10 in = 0;
+      #10 in = 0; rx=0;
+      for (i =0; i < 40; i = i + 1)
+         #10 in = 0;
+      #10 in = 0; rx=1;
+      for (i =0; i < 40; i = i + 1)
          #10 in = 0;
       $finish;
     end
