@@ -1,6 +1,7 @@
-`include "one_shot.v"
+`include "counters.v"
+`timescale 1ns/1ps
 
-module one_shot_tb();
+module counter_8_tb();
 reg clk, level;
 
 wire pulse;
@@ -19,58 +20,58 @@ counter_8 DUT (clk, pulse, rst, load);
 
       $monitor ( "time: %2g   clk: %b  pulse: %b rst: %b" , $time, clk, pulse, rst);
       clk = 1;
-      load = 15;
-      #5 level = 0; rst = 1;//
-      #5 level = 0;
-      #5 level = 0; // 
-      #5 level = 0;
-      #5 level = 1; rst = 0; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
+      load = 20;
+      #10 level = 0; rst = 1;//
+      #10 level = 0;
+      #10 level = 0; // 
+      #10 level = 0;
+      #10 level = 1; rst = 0; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
        $finish;
     end
 
 
    always begin
-     #5 clk = ~clk; // Toggle clock every 5 ticks
+     #10 clk = ~clk; // Toggle clock every 5 ticks
    end
 
 endmodule

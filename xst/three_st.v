@@ -67,7 +67,7 @@ endmodule
 
 
 module freq_div_2 ( clk ,out );
-output reg out;
+output reg out =0;
 input clk ;
 
 always @(posedge clk)

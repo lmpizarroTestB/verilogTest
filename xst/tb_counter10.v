@@ -1,4 +1,5 @@
-`include "uart.v"
+`include "counters.v"
+`timescale 1ns/1ps
 
 module one_shot_tb();
 reg clk, level;
@@ -17,51 +18,51 @@ counter10 DUT (clk, pulse, rst);
 
       $monitor ( "time: %2g   clk: %b  pulse: %b rst: %b" , $time, clk, pulse, rst);
       clk = 1;
-      #5 level = 0; rst = 1;//
-      #5 level = 0;
-      #5 level = 0; // 
-      #5 level = 0;
-      #5 level = 1; rst = 0; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 1; //
-      #5 level = 1;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
-      #5 level = 0;
-      #5 level = 0; //
+      #10 level = 0; rst = 1;//
+      #10 level = 0;
+      #10 level = 0; // 
+      #10 level = 0;
+      #10 level = 1; rst = 0; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 1; //
+      #10 level = 1;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
+      #10 level = 0;
+      #10 level = 0; //
        $finish;
     end
 

@@ -1,4 +1,5 @@
-`include "uart.v"
+`include "counters.v"
+`timescale 1ns/1ps
 
 module one_shot_tb();
 reg clk, level;
@@ -17,52 +18,52 @@ counter20 DUT (clk, pulse, rst);
 
       $monitor ( "time: %2g   clk: %b  pulse: %b rst: %b" , $time, clk, pulse, rst);
       clk = 1;
-      #5 rst = 1;//
-      #5 rst = 1;//
-      #5 rst = 1;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
-      #5 rst = 0;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
+      #10 rst = 0;//
        $finish;
     end
 
