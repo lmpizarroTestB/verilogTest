@@ -94,7 +94,7 @@ reg run = 1'b0;
 
 always @(posedge clk)
 begin
- if (run == 1'b1) 
+ if (run) 
  begin
   curr_length <= curr_length + 1; 
   if (curr_length ==  length + 1) begin
@@ -135,64 +135,64 @@ endmodule
 module pwmN #(parameter Nbits = 8)
   (clk, start, outw, data, load, rst);
 
-input clk, start, load, rst;
-output  out, outw;
+ input clk, start, load, rst;
+ output outw;
 
-input  [Nbits - 1:0] data;
-reg [Nbits - 1:0] length = 10'b11111111;
-reg [Nbits - 1:0] curr_length = 0;
-reg [Nbits - 1:0] pulse_width = 0;
-reg [Nbits - 1:0] curr_width = 0;
+ input  [Nbits - 1:0] data;
 
-reg out = 1'b0;
-reg outw = 1'b0;
-reg run = 1'b0;
+ reg outw = 1'b0;
+ reg run = 1'b0;
 
-always @(posedge clk)
-begin
- if (run == 1'b1) 
+ reg [Nbits - 1:0] length = 8'b11111111;
+ reg [Nbits - 1:0] curr_length = 0;
+ reg [Nbits - 1:0] pulse_width = 0;
+ reg [Nbits - 1:0] curr_width = 0;
+
+ always @(posedge clk)
  begin
-  curr_length <= curr_length + 1; 
-  if (curr_length ==  length) begin
-   out <= 1'b1;
-   outw <= 1'b1;
-   curr_length <= 0; end
- end
-end
-
-always @(posedge clk)
-begin
- curr_width = curr_width + 1;
- if (curr_width == pulse_width) outw = 1'b0;
-end
-
-
-always @(negedge clk)
-begin
- if (out == 1'b1) out <= 1'b0; 
-end
-
-always @(posedge start)
-begin
- run <= 1'b1;
- curr_length <= 0;
-end
-
-always @(posedge load)
-begin
- pulse_width <= data;
-end
-
-always @(posedge rst)
-begin
-  if (rst) 
+  if (run == 1'b1) 
   begin
-   run <= 1'b0;
-   curr_length <= 0;
-   out <= 1'b0;
-  end
-end
+   curr_length = curr_length + 1;
+   if (curr_length ==  length) 
+   begin
+    outw <= 1'b1;
+    curr_width = 0;
+   end
+  end  
+ end
 
+ always @(posedge clk)
+ begin
+  curr_width = curr_width + 1;
+  if (curr_width == pulse_width) 
+  begin
+   curr_width = 0;
+   outw = 1'b0; 
+  end
+  else begin
+   curr_width = curr_width; 
+  end
+ end
+
+ always @(posedge start)
+ begin
+  if (start) 
+   run <= 1'b1;
+ end
+
+ always @(posedge load)
+ begin
+  if (load) 
+    pulse_width <= data;
+ end
+
+ always @(posedge rst)
+ begin
+   if (rst) 
+   begin
+    run <= 1'b0;
+   end
+ end
 endmodule
 
 
