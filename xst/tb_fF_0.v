@@ -1,6 +1,6 @@
 `include "flipFlops.v"
 
-module one_shot_tb();
+module tb_flop_0();
 reg clk, level;
 
 wire pulse;

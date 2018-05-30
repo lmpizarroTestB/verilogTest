@@ -1,59 +1,78 @@
-`include "flipFlops.v"
+//
+//
+//
+//
+module one_shot (clk, in, out, data, load, rst);
 
-module one_shot (clk, in, out, dur, rst);
-input clk, in, rst;
+input clk, in, load, rst;
 output  out;
-input  [7:0] dur;
 
-reg out = 1;
-reg c = 0;
-reg [7:0] tmp = 0;
+input  [7:0] data;
+reg [7:0] length = 8'b00000000;
+reg [7:0] curr_length = 8'b00000000;
+
+reg out = 1'b0;
+reg run = 1'b0;
 
 always @(posedge clk)
 begin
+ if (run == 1'b1) 
+ begin
+  out = 1'b1;
+  curr_length = curr_length + 1; 
+  if (curr_length ==  length + 1) begin
+   run = 1'b0;
+   curr_length = 8'b00000000;
+   out = 1'b0; end 
+ end
+end
 
-        if (in && c == 1'b0) begin
-	    c = 1;
-	    out = ~out;
-            tmp = tmp + 1; end
-	    else if (c == 1'b1) begin
-	   
-	   if (tmp == dur) begin
-	     c = 1'b0;
-	     tmp = 1'b0;
-             out = 1'b1; end 
-           else tmp = tmp + 1;
-           end
+
+always @(posedge in)
+begin
+ run <= 1'b1;
+end
+
+always @(posedge load)
+begin
+ length <= data;
 end
 
 always @(posedge rst)
 begin
-  if (rst) begin
-   c = 0;
-   tmp = 0;
-   out = 0; end
+  if (rst) 
+  begin
+   run = 1'b0;
+   curr_length = 8'b00000000;
+   out = 1'b0;
+   length = 8'b00000000;
+  end
 end
 
 endmodule
 
+//
+//
+//
+//
 module level_to_pulse(clk, level, pulse);
 input clk, level;
 output pulse;
 
-reg pulse =0;
-reg c = 0;
+reg pulse = 1'b0;
+reg c = 1'b0;
 
- always @(posedge clk)
+ always @(posedge level or posedge clk or negedge clk)
  begin
   if (level) 
   begin
     if (~c) begin 
-     pulse = 1; 
-     c = 1; end
-    else pulse = 0; end
+     pulse <= 1'b1; 
+     c <= 1'b1; end
+    else pulse <= 1'b0; end
   else begin
-   c = 0;
-   pulse = 0;
+   c <= 1'b0;
+   pulse <= 1'b0;
   end
  end
 

@@ -1,6 +1,6 @@
 `include "one_shot.v"
 
-module one_shot_tb();
+module tb_level_to_pulse();
 reg clk, level;
 
 wire pulse;

@@ -2,7 +2,8 @@
 `include "three_st.v"
 `timescale 1ns/1ps
 
-module one_shot_tb();
+module tb_freq_div_2();
+
 reg clk, in, rst, rx;
 reg [7:0] dur;
 integer i;

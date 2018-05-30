@@ -1,7 +1,7 @@
 `include "counters.v"
 `timescale 1ns/1ps
 
-module one_shot_tb();
+module tb_counter20();
 reg clk, level;
 
 wire pulse;
