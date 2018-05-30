@@ -18,12 +18,12 @@ always @(posedge clk)
 begin
  if (run == 1'b1) 
  begin
-  out = 1'b1;
-  curr_length = curr_length + 1; 
+  out <= 1'b1;
+  curr_length <= curr_length + 1; 
   if (curr_length ==  length + 1) begin
-   run = 1'b0;
-   curr_length = 8'b00000000;
-   out = 1'b0; end 
+   run <= 1'b0;
+   curr_length <= 8'b00000000;
+   out <= 1'b0; end 
  end
 end
 
@@ -31,6 +31,7 @@ end
 always @(posedge in)
 begin
  run <= 1'b1;
+ curr_length <= 8'b00000000;
 end
 
 always @(posedge load)
@@ -42,10 +43,10 @@ always @(posedge rst)
 begin
   if (rst) 
   begin
-   run = 1'b0;
-   curr_length = 8'b00000000;
-   out = 1'b0;
-   length = 8'b00000000;
+   run <= 1'b0;
+   curr_length <= 8'b00000000;
+   out <= 1'b0;
+   length <= 8'b00000000;
   end
 end
 
