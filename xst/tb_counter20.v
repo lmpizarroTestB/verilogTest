@@ -6,6 +6,7 @@ reg clk, level;
 
 wire pulse;
 reg rst;
+integer i;
 
 counter20 DUT (clk, pulse, rst);
 
@@ -28,42 +29,8 @@ counter20 DUT (clk, pulse, rst);
       #10 rst = 0;//
       #10 rst = 0;//
       #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
-      #10 rst = 0;//
+      for (i = 0; i <100; i = i+1)
+        #10 rst = 0;//
        $finish;
     end
 

@@ -2,10 +2,12 @@
 `timescale 1ns/1ps
 
 module counter_8_tb();
-reg clk, level;
+reg clk;
 
 wire pulse;
 reg rst;
+
+integer i;
 
 reg [7:0] load;
 
@@ -20,52 +22,16 @@ counter_8 DUT (clk, pulse, rst, load);
 
       $monitor ( "time: %2g   clk: %b  pulse: %b rst: %b" , $time, clk, pulse, rst);
       clk = 1;
-      load = 20;
-      #10 level = 0; rst = 1;//
-      #10 level = 0;
-      #10 level = 0; // 
-      #10 level = 0;
-      #10 level = 1; rst = 0; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 0;
-      #10 level = 0; //
-      #10 level = 0;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 0;
-      #10 level = 0; //
-      #10 level = 0;
-      #10 level = 0; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 0;
-      #10 level = 0; //
-      #10 level = 0;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 1; //
-      #10 level = 1;
-      #10 level = 0; //
-      #10 level = 0;
-      #10 level = 0; //
-      #10 level = 0;
-      #10 level = 0; //
+      load = 10;
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 1;//
+      #10 rst = 0;//
+      for (i=0; i<100;i=i+1)
+        #10 rst = 0;//
        $finish;
     end
 
