@@ -6,11 +6,11 @@ module one_shot_tb();
 reg clk, in, reset, load;
 reg [7:0] data_dur;
 wire out;
-// in: pulse
-// out: level
-//
 
-one_shot DUT (clk, in, out, data_dur, load, reset); //(clk, in, out, dur, rx);
+integer i;
+
+
+pulse_to_level DUT (clk, in, out, data_dur, load, reset); //(clk, in, out, dur, rx);
 
   initial 
     begin
@@ -39,45 +39,15 @@ one_shot DUT (clk, in, out, data_dur, load, reset); //(clk, in, out, dur, rx);
       #10 reset = 0; in = 1'b1;
       #10 reset = 0; in = 1'b1;
       #10 reset = 0; in = 1'b0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0; 
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
-      #10 reset = 0;
+      for (i=0;i<50;i=i+1)
+        #10 reset = 0;
+      #10 reset = 0; in = 1'b1;
+      #10 reset = 0; in = 1'b1;
+      #10 reset = 0; in = 1'b1;
+      #10 reset = 0; in = 1'b0;
+      for (i=0;i<50;i=i+1)
+        #10 reset = 0;
+
       $finish;
     end
 

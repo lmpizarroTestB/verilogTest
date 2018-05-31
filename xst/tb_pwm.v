@@ -11,7 +11,7 @@ wire out;
 // out: level
 //
 
-periodic_pulse DUT (clk, in, out, data_dur, load, reset);
+pwm DUT (clk, out, data_dur, load); 
 
   initial 
     begin
@@ -23,7 +23,7 @@ periodic_pulse DUT (clk, in, out, data_dur, load, reset);
       $monitor ( "time: %2g   clk: %b in: %b out: %b data_dur: %b load: %b" , $time, clk, in, out, data_dur, load);
       reset = 1'b0;
       load = 1'b0;
-      data_dur = 8'b00001111;
+      data_dur = 8'b01001111;
       in = 1'b0;
       clk = 1'b1;
       #10 reset = 0;
@@ -36,10 +36,10 @@ periodic_pulse DUT (clk, in, out, data_dur, load, reset);
       #10 reset = 0; load = 1'b1;
       #10 reset = 0;
       #10 reset = 0;
-      #10 reset = 0; in = 1'b1;
-      #10 reset = 0; in = 1'b1;
-      #10 reset = 0; in = 1'b1;
-      #10 reset = 0; in = 1'b0;
+      #10 reset = 0; 
+      #10 reset = 0; 
+      #10 reset = 0;
+      #10 reset = 0;
       #10 reset = 0;
       #10 reset = 0;
       for (i = 0; i < 2500; i = i + 1)

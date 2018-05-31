@@ -2,7 +2,7 @@
 //
 //
 //
-module one_shot 
+module pulse_to_level 
   (clk, 
    trigger, 
    out, 
@@ -66,27 +66,25 @@ module level_to_pulse(clk, level, pulse);
 input clk, level;
 output pulse;
 
-reg pulse = 1'b0;
 reg c = 1'b0;
 
-always @(posedge level or posedge clk)
- begin
-  if (level) 
-  begin
-    if (!c) begin 
-     pulse <= 1'b1; 
-     c <= 1'b1; end
-    else pulse <= 1'b0; 
-  end
-  else begin
-   c <= 1'b0;
-   pulse <= 1'b0;
-  end
- end
+assign pulse = c;
 
+always @(posedge level)
+begin
+    if (!c) c <= 1'b1; 
+end
+
+always @(negedge clk)
+begin
+ if (c==1'b1) c=1'b0;
+end
 endmodule
 
-
+//
+//
+//
+//
 module periodic_pulse (clk, start, out, data, load, rst);
 
 input clk, start, load, rst;
@@ -96,23 +94,23 @@ input  [7:0] data;
 reg [7:0] length = 8'b00000000;
 reg [7:0] curr_length = 8'b00000000;
 
-reg out = 1'b0;
 reg run = 1'b0;
+
+assign out = run;
 
 always @(posedge clk)
 begin
- if (run) 
  begin
   curr_length <= curr_length + 1; 
-  if (curr_length ==  length + 1) begin
-   out <= 1'b1;
+  if (curr_length ==  length) begin
+   run <= 1'b1;
    curr_length <= 8'b00000000; end
  end
 end
 
 always @(negedge clk)
 begin
- if (out == 1'b1) out <= 1'b0; 
+ if (run == 1'b1) run = 1'b0; 
 end
 
 always @(posedge start)
@@ -132,13 +130,17 @@ begin
   begin
    run <= 1'b0;
    curr_length <= 8'b00000000;
-   out <= 1'b0;
    length <= 8'b00000000;
   end
 end
 
 endmodule
 
+
+//
+//
+//
+//
 module pwmN #(parameter Nbits = 8)
   (clk, start, outw, data, load, rst);
 
@@ -201,5 +203,36 @@ module pwmN #(parameter Nbits = 8)
    end
  end
 endmodule
+//
+//
+//
+//
+module pwm(clk, outpwm, pulse_width, load);
+ input load, clk;
+ input [7:0] pulse_width;
+ reg [7:0] curr_width;
+ reg [7:0] counter = 0;
+ wire outpulse;
+ output outpwm;
 
+ reg init_count = 0;
+
+ assign outpulse = (counter == 1'd0);
+ assign outpwm = init_count;
+
+
+ always @(posedge clk) 
+ begin
+   counter <= (counter + 1'd1);
+   curr_width <= (curr_width + 1'd1);
+   if (curr_width == pulse_width) init_count = 0; 
+ end
+
+ always @(posedge outpulse)
+ begin
+   init_count <= 1'b1; 
+   curr_width = 0;
+ end
+
+endmodule
 

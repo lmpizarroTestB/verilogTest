@@ -6,12 +6,12 @@ module one_shot_tb();
 integer i;
 reg clk, in, reset, load;
 reg [7:0] data_dur;
-wire out;
+wire outw;
 // in: pulse
 // out: level
 //
 
-periodic_pulse DUT (clk, in, out, data_dur, load, reset);
+pwmN DUT (clk, in, outw, data_dur, load, reset); //(clk, in, out, dur, rx);
 
   initial 
     begin
@@ -20,7 +20,7 @@ periodic_pulse DUT (clk, in, out, data_dur, load, reset);
     // the variable 's' is what GTKWave will label the graphs with
     $dumpvars(0, DUT);
 
-      $monitor ( "time: %2g   clk: %b in: %b out: %b data_dur: %b load: %b" , $time, clk, in, out, data_dur, load);
+      $monitor ( "time: %2g   clk: %b in: %b out: %b data_dur: %b load: %b" , $time, clk, in, outw, data_dur, load);
       reset = 1'b0;
       load = 1'b0;
       data_dur = 8'b00001111;
