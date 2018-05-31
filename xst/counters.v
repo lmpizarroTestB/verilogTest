@@ -32,15 +32,15 @@ reg [3:0] counter = 0;
 
 always @(posedge clk)
 begin
-   if (rst) begin
-     counter = 4'b0000;
-   end
-   else begin
-   counter = counter + 1;
-   if (counter == 4'b1010 + 1) begin
-	   counter = 0;
-   end
-   end
+  if (rst) begin
+    counter = 4'b0000;
+  end
+  else begin
+  counter = counter + 1;
+  if (counter == 4'b1010 + 1) begin
+   counter = 0;
+  end
+  end
 end
 endmodule
 
@@ -77,21 +77,19 @@ begin
 end
 endmodule
 
-
-
 module bit_clk ( clk ,out, rx );
 
-output out;
-input clk, rx;
+ output out;
+ input clk, rx;
 
-reg rst =0; 
+ reg rst =0; 
 
-wire p;
+ wire p;
 
-assign out = p & pulse;
+ assign out = p & pulse;
 
-counter10 c10(clk, pulse, rst);
-freq_div_2 f2(pulse , p );
+ counter10 c10(clk, pulse, rst);
+ freq_div_2 f2(pulse , p );
 
 endmodule
 

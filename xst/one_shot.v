@@ -13,23 +13,24 @@ module one_shot
 input clk, trigger, load, rst;
 output  out;
 
-input  [7:0] data;
+
+input [7:0] data;
 reg [7:0] length = 8'b00000000;
 reg [7:0] curr_length = 8'b00000000;
 
-reg out = 1'b0;
 reg run = 1'b0;
+
+assign out = run;
 
 always @(posedge clk)
 begin
  if (run) 
  begin
-  out <= 1'b1;
   curr_length <= curr_length + 1; 
-  if (curr_length ==  length + 1) begin
+  if (curr_length ==  length) begin
    run <= 1'b0;
    curr_length <= 8'b00000000;
-   out <= 1'b0; end 
+   end 
  end
 end
 
@@ -51,7 +52,6 @@ begin
   begin
    run <= 1'b0;
    curr_length <= 8'b00000000;
-   out <= 1'b0;
    length <= 8'b00000000;
   end
 end
@@ -69,14 +69,15 @@ output pulse;
 reg pulse = 1'b0;
 reg c = 1'b0;
 
- always @(posedge level or posedge clk or negedge clk)
+always @(posedge level or posedge clk)
  begin
   if (level) 
   begin
     if (!c) begin 
      pulse <= 1'b1; 
      c <= 1'b1; end
-    else pulse <= 1'b0; end
+    else pulse <= 1'b0; 
+  end
   else begin
    c <= 1'b0;
    pulse <= 1'b0;

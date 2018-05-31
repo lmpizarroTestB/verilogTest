@@ -22,7 +22,7 @@ one_shot DUT (clk, in, out, data_dur, load, reset); //(clk, in, out, dur, rx);
       $monitor ( "time: %2g   clk: %b in: %b out: %b data_dur: %b load: %b" , $time, clk, in, out, data_dur, load);
       reset = 1'b0;
       load = 1'b0;
-      data_dur = 8'b00000010;
+      data_dur = 8'b00001010;
       in = 1'b0;
       clk = 1'b1;
       #10 reset = 0;
