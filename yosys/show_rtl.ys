@@ -2,15 +2,16 @@
 #read_verilog counter_en_rst.v
 #read_verilog three_st.v
 #read_verilog counter_load.v
-read_verilog counter_load16.v
+#read_verilog counter_load16.v
 #read_verilog counter_yosys.v
+read_verilog counter_y16.v
 hierarchy -check
 
-show
 
 # high-level synthesis
 proc; opt; fsm; opt; memory; opt
 
+show
 
 techmap; opt
 

@@ -8,3 +8,5 @@
 *.png
 simu
 *.swp
+*.bin
+*.blif
