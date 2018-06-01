@@ -1,0 +1,4 @@
+set_io d 95
+set_io arst 97
+set_io q 98
+set_io clk 21
