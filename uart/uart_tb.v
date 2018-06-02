@@ -1,7 +1,7 @@
-`include "main_ff.v"
+//`include "uart.v"
 `timescale 1ns/1ps
 
-module counter_load16_tb();
+module uart_tb();
 
 reg clk, rx, rst;
 wire out10, out20, outf;
@@ -10,14 +10,14 @@ wire out10, out20, outf;
 integer i;
 
 
-main DUT (clk, rx, rst, out10, out20, outf);
+uart DUT (clk, rx, rst, out10, out20, outf);
 
   initial 
     begin
     // vcd dump
-    $dumpfile("simple.vcd");
+    $dumpfile("uart_tb.vcd");
     // the variable 's' is what GTKWave will label the graphs with
-    $dumpvars(0, DUT);
+    $dumpvars(0, uart_tb);
 
       $monitor ( "time: %2g   clk: %b  rx: %b rst: %b out10: %b out20 %b outf %b" , $time, clk, rx, rst, out10, out20, outf);
       clk = 1;

@@ -1,6 +1,6 @@
 //`include "components.v"
 
-module main (clk_br, rx, rst, out10, out20, outf);
+module uart (clk_br, rx, rst, out10, out20, outf);
 
   input clk_br, rx, rst;
   output out10, out20, outf;
@@ -20,6 +20,10 @@ module main (clk_br, rx, rst, out10, out20, outf);
   assign cnt10Out = cnt10 == 5'd10;
   assign bitVal = bitClk & rx;
   assign rst1 = ~cnt10Out;
+
+  assign out10 = cnt10Out;
+  assign out20 = bitVal;
+  assign outf = q2;
   
   dffa1   dffq1(.clk(clk1), .arst(rst1), .d(1'b1), .q(q1));
   counter5 cnt51(.clk(clk_br), .rst(~rst | cnt10Out), .en(q1), .count(cnt10));
