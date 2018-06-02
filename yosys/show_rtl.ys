@@ -4,14 +4,14 @@
 #read_verilog counter_load.v
 #read_verilog counter_load16.v
 #read_verilog counter_yosys.v
-read_verilog counter_y16.v
+read_verilog shift.v
 hierarchy -check
 
 
 # high-level synthesis
 proc; opt; fsm; opt; memory; opt
 
-show
+show -format ps -viewer evince
 
 techmap; opt
 

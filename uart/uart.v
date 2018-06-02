@@ -1,5 +1,4 @@
-`include "dff_different_styles.v"
-`include "counter_yosys.v"
+`include "components.v"
 
 module main (clk_br, rx, rst, out10, out20, outf);
 
