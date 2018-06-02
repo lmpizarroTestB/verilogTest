@@ -1,0 +1,6 @@
+set_io clk 21
+set_io arst 95
+set_io d 96
+set_io q[0] 97
+set_io q[1] 98
+set_io s 99
