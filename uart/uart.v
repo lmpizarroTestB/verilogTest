@@ -1,4 +1,4 @@
-`include "components.v"
+//`include "components.v"
 
 module main (clk_br, rx, rst, out10, out20, outf);
 
@@ -21,12 +21,12 @@ module main (clk_br, rx, rst, out10, out20, outf);
   assign bitVal = bitClk & rx;
   assign rst1 = ~cnt10Out;
   
-  dffa1   dffq1(clk1, rst1, 1'b1, q1);
-  counter5 cnt51(clk_br, ~rst | cnt10Out, q1, cnt10);
+  dffa1   dffq1(.clk(clk1), .arst(rst1), .d(1'b1), .q(q1));
+  counter5 cnt51(.clk(clk_br), .rst(~rst | cnt10Out), .en(q1), .count(cnt10));
   
-  dffa1   dffq2(stbitok, ~rst | ~cnt9Out, 1'b1, q2);
+  dffa1   dffq2(.clk(stbitok), .arst(~rst | ~cnt9Out), .d(1'b1), .q(q2));
   
-  counter5 cnt5(clk_br, ~rst | bitClk, q2, cnt20);
-  counter8 cnt61(clk_br, ~rst | stbitok, q2, cnt9);
+  counter5 cnt5(.clk(clk_br), .rst(~rst | bitClk), .en(q2), .count(cnt20));
+  counter8 cnt61(.clk(clk_br), .rst(~rst | stbitok), .en(q2), .count(cnt9));
 
 endmodule

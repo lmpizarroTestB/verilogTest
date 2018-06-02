@@ -3,4 +3,4 @@ set_io out20 96
 set_io outf 97
 set_io rx 98
 set_io rst 99
-set_io clk 21
+set_io clk_br 21
