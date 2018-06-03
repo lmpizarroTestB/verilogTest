@@ -20,7 +20,9 @@ positive-edge clock, serial in, and serial out.
 */
 
 /*
-8-bit Shift-Left Register with Positive-Edge Clock,
+8-bit Shift-Left Register with 
+
+Positive-Edge Clock,
 Serial In, and 
 Serial Out
 
@@ -46,6 +48,7 @@ endmodule
 
 /*
 8-bit Shift-Left Register with 
+
 Negative-Edge Clock,
 Clock Enable, 
 Serial In, and 
@@ -62,6 +65,7 @@ module shift_1 (C, CE, SI, SO);
   input C,SI, CE;
   output SO;
   reg [7:0] tmp;
+
   always @(negedge C)
   begin
     if (CE)
@@ -75,6 +79,7 @@ endmodule
 
 /*
 8-bit Shift-Left Register with 
+
 Positive-Edge Clock,
 Asynchronous Clear, 
 Serial In, and 
@@ -105,6 +110,7 @@ endmodule
 
 /*
 8-bit Shift-Left Register with 
+
 Positive-Edge Clock,
 Synchronous Set, 
 Serial In, and 
@@ -124,15 +130,17 @@ module shift_3 (C, S, SI, SO);
  input C,SI,S;
  output SO;
  reg [7:0] tmp;
+
  always @(posedge C)
  begin
- if (S)
- tmp = 8'b11111111;
- else
- begin
-  tmp = {tmp[6:0], SI};
+  if (S)
+   tmp = 8'b11111111;
+  else
+  begin
+   tmp = {tmp[6:0], SI};
+  end
  end
- end
+
  assign SO = tmp[7];
 endmodule
 
@@ -180,6 +188,7 @@ module shift_5 (C, ALOAD, SI, D, SO);
  input [7:0] D;
  output SO;
  reg [7:0] tmp;
+
  always @(posedge C or posedge ALOAD)
  begin
   if (ALOAD)
@@ -305,3 +314,38 @@ module shift_8 #(parameter Nbits = 8)
  assign Q = tmp;
 endmodule
 
+/*
+16-bit dynamic shift register.
+
+The following table shows pin definitions for a dynamic register. The
+register can be either serial or parallel; be left, right or parallel; have a
+synchronous or asynchronous clear; and have a width up to 16 bits.
+Pag 93 2-69 XST User Guide
+
+IO Pins Description
+---------------------
+Clk   Positive-Edge Clock
+SI    Serial In
+AClr  Asynchronous Clear (optional)
+SClr  Synchronous Clear (optional)
+SLoad Synchronous Parallel Load (optional)
+
+Data           Parallel Data Input Port (optional)
+ClkEn          Clock Enable (optional)
+LeftRight      Direction selection (optional)
+SerialInRight  Serial Input Right for Bidirectional Shift Register (optional)
+PSO[x:0]       Serial or Parallel Output
+
+*/
+module dynamic_srl (Q,CE,CLK,D,A);
+input CLK, D, CE;
+input [3:0] A;
+output Q;
+reg [15:0] data;
+assign Q = data[A];
+always @(posedge CLK)
+begin
+if (CE == 1'b1)
+{data[15:0]} <= {data[14:0], D};
+end
+endmodule
