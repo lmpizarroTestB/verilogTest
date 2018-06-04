@@ -22,7 +22,7 @@ counter_8 DUT (clk, pulse, rst, load);
 
       $monitor ( "time: %2g   clk: %b  pulse: %b rst: %b" , $time, clk, pulse, rst);
       clk = 1;
-      load = 10;
+      load = 4;
       #10 rst = 1;//
       #10 rst = 1;//
       #10 rst = 1;//
