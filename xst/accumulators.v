@@ -1,4 +1,8 @@
 /*
+[The 74381/74382](http://www.6502.org/users/dieter/a7/a7_1.htm)
+[74182 Carry Look-Ahead Circuit](http://web.eecs.umich.edu/~jhayes/iscas.restore/74182.html)
+*/
+/*
 4-bit unsigned up accumulator
 with asynchronous clear.
 
@@ -158,7 +162,7 @@ reg [7:0] a3;
 
 always @(A,B)
 begin
- a0[7:0]  = {1'b0, 1'b0, 1'b0, 1'b0, A} & {8{B[0]}};
+ a0[7:0]  = {1'b0, 1'b0, 1'b0, 1'b0, A[3:0]} & {8{B[0]}};
  a1[7:0]  = {1'b0,1'b0,1'b0,A[3:0],1'b0} & {8{B[1]}};
  a2[7:0]  = {1'b0,1'b0,A[3:0],1'b0,1'b0} & {8{B[2]}};
  a3[7:0]  = {1'b0,A[3:0],1'b0,1'b0,1'b0} & {8{B[3]}};
