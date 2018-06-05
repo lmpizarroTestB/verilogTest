@@ -53,3 +53,10 @@
 [Migen](https://m-labs.hk/migen/index.html)
 
 
+** MyHdl examples
+
+[HDMI-Source-Sink-Modules](https://github.com/srivatsan-ramesh/HDMI-Source-Sink-Modules)
+
+[Py RTL](http://ucsbarchlab.github.io/PyRTL/)
+
+[Rapid FPGA Design in Python Using MyHDL](http://mirror.thelifeofkenneth.com/lib/electronics_archive/RapidFpgaDesignInPythonUsingMyhdl.pdf)
