@@ -1,6 +1,7 @@
 /*
 [The 74381/74382](http://www.6502.org/users/dieter/a7/a7_1.htm)
 [74182 Carry Look-Ahead Circuit](http://web.eecs.umich.edu/~jhayes/iscas.restore/74182.html)
+[Inside the vintage 74181 ALU chip: how it works and why it's so strange](http://www.righto.com/2017/03/inside-vintage-74181-alu-chip-how-it.html)
 */
 /*
 4-bit unsigned up accumulator

@@ -47,4 +47,15 @@
 [Design Recipes for FPGAs (Second Edition)](https://www.sciencedirect.com/science/article/pii/B978008097129209992X)
 
 
-[Digital Integrated Circuit Design Using Verilog and Systemverilogi](https://www.sciencedirect.com/science/book/9780124080591) 
+[Digital Integrated Circuit Design Using Verilog and Systemverilogi](https://www.sciencedirect.com/science/book/9780124080591)
+
+
+[MIT 6.111 2016](http://web.mit.edu/6.111/www/f2016/handouts/)
+
+[MIT 6.111 2017](http://web.mit.edu/6.111/www/f2017/handouts/)
+
+[MIT 6.111 OCW](http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-111-introductory-digital-systems-laboratory-spring-2006/index.htm)
+
+[Computation structures MIT 6004](http://computationstructures.org/)
+
+[MIT 6004](https://6004.csail.mit.edu/)

@@ -85,6 +85,46 @@ end
 assign out = bit_pulse;
 endmodule
 
+module XYZ (clk_br, data, rst, ready, tx, wr);
+input clk_br;
+input [7:0] data;
+input rst;
+output ready;
+output reg tx;
+input wr;
+
+
+reg ready = 1'b1;
+reg [7:0] buffer;
+reg [3:0] counter;
+wire end_tx;
+
+assign end_tx = (counter == 4'b1011);
+
+always @(posedge clk_br)
+begin
+   if (~ready) begin
+   end
+end
+
+always @(negedge wr)
+begin
+  buffer <= data;
+  ready <= 1'b0;
+  counter <= 4'b0000;
+end
+
+always @(negedge rst or posedge end_tx)
+begin
+  ready <= 1'b1;
+  tx <= 1'b1;
+  counter <= 4'b0000;
+end
+
+endmodule
+
+
+
 /*---------------------------------------------
  test
 ---------------------------------------------*/
