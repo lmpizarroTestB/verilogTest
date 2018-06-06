@@ -85,41 +85,84 @@ end
 assign out = bit_pulse;
 endmodule
 
-module XYZ (clk_br, data, rst, ready, tx, wr);
-input clk_br;
-input [7:0] data;
-input rst;
-output ready;
-output reg tx;
-input wr;
+module ABCD_2 (clk_br, rst, rx, out, read);
+input clk_br, rx, rst, read;
+output out;
+wire cnt10, cnt210;
 
+reg [7:0] counter = 8'b00000000;
 
-reg ready = 1'b1;
-reg [7:0] buffer;
-reg [3:0] counter;
-wire end_tx;
+parameter SIZE = 3;
+reg   [SIZE-1:0] state;// Seq part of the FSM
+reg   [SIZE-1:0] next_state;// combo part of FSM
 
-assign end_tx = (counter == 4'b1011);
+reg cen, ready = 1'b0;
+reg int_reset = 1'b0;
+assign cnt10 = counter == 8'b00001010;
+assign cnt210 = counter == 8'b11010010;
+
+localparam STATE_0 = 3'b000;
+localparam STATE_1 = 3'b001;
+localparam STATE_2 = 3'b010;
+localparam STATE_3 = 3'b011;
+localparam STATE_4 = 3'b100;
+
+assign out = cnt10 | cnt210;
 
 always @(posedge clk_br)
-begin
-   if (~ready) begin
-   end
-end
+  begin
+  if (rst | int_reset) begin
+    state = STATE_0;
+    counter <= 8'b00000000;
+    cen <= 1'b0;
+    ready <= 1'b0;
+  end else
+   case (state)
+    STATE_0:
+	    if (rx)
+	    state <= STATE_0;
+            else begin
+            cen = 1'b1;		    
+	    state <= STATE_1;end
+    STATE_1:
+	    if (~rx & cnt10)
+	      state <= STATE_2;
+            else if (rx & cnt10) begin
+	     state <= STATE_0;
+	     int_reset <= 1'b1; end
+    STATE_2:
+	    if (cnt210 & rx == 1'b1) begin
+	       state <= STATE_3;
+	       ready = 1'b1; end 
+	       else if (cnt210 & rx == 1'b0) begin
+	         state <=STATE_0;
+	         int_reset <= 1'b1; end
+    STATE_3:
+	    if (read) begin
+	      state <= STATE_0;
+	      int_reset <= 1'b1;
+            end
+    default: state <= STATE_0;
+   endcase
+  end
 
-always @(negedge wr)
-begin
-  buffer <= data;
-  ready <= 1'b0;
-  counter <= 4'b0000;
-end
+/*
+inputs              |     states            |   out    | counter control
+read    rst     rx     cnt      e	e+	dready	rstc	cen
+x       1       x       0       0	0	0	 0	0
+x       0       1       0       0	0	0	 0	0
+x       0       0       0       0	1	0	 0	1
+x       0       0       10      1	10	0	 0	1
+x       0       1       10      1	0	0	 0	0
+x       0       x       210     10	11	0	 1	0
+x       0       0       210     10	0	0	 0	0
+1       0       x       210     11	0	0	 1	0
+*/
 
-always @(negedge rst or posedge end_tx)
-begin
-  ready <= 1'b1;
-  tx <= 1'b1;
-  counter <= 4'b0000;
-end
+always @(posedge clk_br)
+  if (cen) begin
+   counter = counter + 1;
+  end
 
 endmodule
 
@@ -129,13 +172,13 @@ endmodule
  test
 ---------------------------------------------*/
 module tb_te();
-reg clk, rx, in;
+reg clk, rx, in, rst, read;
 integer i;
 
 
 wire out;
 
-ABCD DUT1 (clk, rx, out);
+ABCD_2 DUT1 (clk, rst, rx, out, read);
 
   initial 
     begin
@@ -147,23 +190,55 @@ ABCD DUT1 (clk, rx, out);
       $monitor ( "time: %2g   clk: %b rx: %b out: %b " , $time, clk, rx, out);
       clk = 1'b1;
       rx = 1'b1;
-      #10 in = 1;
-      #10 in = 1;
-      #10 in = 1;
-      #10 in = 1;
+      read = 1'b0;
+      #10 in = 1; rst = 0;
+      #10 in = 1; rst = 0;
+      #10 in = 1; rst = 1;
+      #10 in = 1; rst = 1;
+      #10 in = 1; rst = 1;
+      #10 in = 1; rst = 1;
       #10 in = 0;
-      #10 in = 0; rx =0;
+      #10 in = 0;
+      #10 in = 1; rst = 0;
+      #10 in = 1; rst = 0;
+      #10 in = 1; rst = 0;
+      #10 in = 0;
+      #10 in = 0; 
       for (i =0; i < 40; i = i + 1)
-         #10 in = 0;
-      #10 in = 0; rx=1;
-      for (i =0; i < 500; i = i + 1)
-         #10 in = 0;
-      #10 in = 0; rx=0;
-      for (i =0; i < 10; i = i + 1)
-         #10 in = 0;
-      #10 in = 0; rx=1;
-      for (i =0; i < 100; i = i + 1)
-         #10 in = 0;
+         #10 rx = 0;   // bit 1 Start
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;   // bit 2
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 0;   // bit 3
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;   // bit 4
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 0;   // bit 5
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;   // bit 6
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 0;   // bit 7
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;   // bit 8
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 0;   // bit 9
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;   // bit paridad
+      for (i =0; i < 40; i = i + 1)
+         #10 rx = 1;  // stop bit
+      for (i =0; i < 80; i = i + 1)
+         #10 rx = 1;
+      #10 read = 1;
+      #10 read = 1;
+      #10 read = 1;
+      #10 read = 1;
+      #10 read = 1;
+      #10 read = 1;
+      #10 read = 1;
+      for (i =0; i < 80; i = i + 1)
+         #10 read = 1;
+         
+
       $finish;
     end
 
