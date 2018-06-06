@@ -88,7 +88,7 @@ endmodule
 module ABCD_2 (clk_br, rst, rx, out, read);
 input clk_br, rx, rst, read;
 output out;
-wire cnt10, cnt210;
+wire cnt10, cnt210, bit_clock;
 
 reg [7:0] counter = 8'b00000000;
 
@@ -100,12 +100,27 @@ reg cen, ready = 1'b0;
 reg int_reset = 1'b0;
 assign cnt10 = counter == 8'b00001010;
 assign cnt210 = counter == 8'b11010010;
+assign bit_clock = (counter == BIT_2 | counter == BIT_0 
+                   | counter == BIT_1 | counter == BIT_3
+		   | counter == BIT_4 | counter == BIT_5
+		   | counter == BIT_6 | counter == BIT_7
+		   | counter == BIT_8 | counter == BIT_9);
 
 localparam STATE_0 = 3'b000;
 localparam STATE_1 = 3'b001;
 localparam STATE_2 = 3'b010;
 localparam STATE_3 = 3'b011;
 localparam STATE_4 = 3'b100;
+
+localparam BIT_0 = 8'b00011110; // 30
+localparam BIT_1 = 8'b00110010; // 50
+localparam BIT_2 = 8'b01000110; //70
+localparam BIT_3 = 8'b01011010; //90
+localparam BIT_4 = 8'b01101110; //110
+localparam BIT_5 = 8'b10000010; //130
+localparam BIT_6 = 8'b10010110; //150
+localparam BIT_7 = 8'b10101010; //170
+localparam BIT_8 = 8'b10111110; //150
 
 assign out = cnt10 | cnt210;
 
