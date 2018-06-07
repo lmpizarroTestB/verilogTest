@@ -1,5 +1,5 @@
 `include "counters.v"
-`include "uart.v"
+`include "shift_registers.v"
 `timescale 1ns/1ps
 
 module ABCD (clk, rx, out);
@@ -85,16 +85,21 @@ end
 assign out = bit_pulse;
 endmodule
 
-module ABCD_2 (clk_br, rst, rx, out, read);
+
+module ABCD_2 (clk_br, rst, rx, read, serialData);
 input clk_br, rx, rst, read;
-output out;
 wire cnt10, cnt210, bit_clock;
 
 reg [7:0] counter = 8'b00000000;
+output [8:0] serialData;
+
+SRS srs1(.clk(bit_clock), .si(bit_clock & rx), .q(serialData), .clr(rst), .z(read), .en(enable_shif_register));
 
 parameter SIZE = 3;
 reg   [SIZE-1:0] state;// Seq part of the FSM
 reg   [SIZE-1:0] next_state;// combo part of FSM
+
+reg enable_shif_register;
 
 reg cen, ready = 1'b0;
 reg int_reset = 1'b0;
@@ -104,7 +109,7 @@ assign bit_clock = (counter == BIT_2 | counter == BIT_0
                    | counter == BIT_1 | counter == BIT_3
 		   | counter == BIT_4 | counter == BIT_5
 		   | counter == BIT_6 | counter == BIT_7
-		   | counter == BIT_8 | counter == BIT_9);
+		   | counter == BIT_8);
 
 localparam STATE_0 = 3'b000;
 localparam STATE_1 = 3'b001;
@@ -122,7 +127,6 @@ localparam BIT_6 = 8'b10010110; //150
 localparam BIT_7 = 8'b10101010; //170
 localparam BIT_8 = 8'b10111110; //150
 
-assign out = cnt10 | cnt210;
 
 always @(posedge clk_br)
   begin
@@ -188,12 +192,12 @@ endmodule
 ---------------------------------------------*/
 module tb_te();
 reg clk, rx, in, rst, read;
+
+wire [8:0] serialData;
+
+ABCD_2 DUT1 (clk, rst, rx, read, serialData);
+
 integer i;
-
-
-wire out;
-
-ABCD_2 DUT1 (clk, rst, rx, out, read);
 
   initial 
     begin
@@ -202,7 +206,7 @@ ABCD_2 DUT1 (clk, rst, rx, out, read);
     // the variable 's' is what GTKWave will label the graphs with
     $dumpvars(0, DUT1);
 
-      $monitor ( "time: %2g   clk: %b rx: %b out: %b " , $time, clk, rx, out);
+      $monitor ( "time: %2g   clk: %b rx: %b out: %b " , $time, clk, rx, serialData);
       clk = 1'b1;
       rx = 1'b1;
       read = 1'b0;

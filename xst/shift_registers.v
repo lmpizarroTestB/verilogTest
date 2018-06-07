@@ -314,6 +314,27 @@ module shift_8 #(parameter Nbits = 8)
  assign Q = tmp;
 endmodule
 
+
+module SRS (clk, si, q, clr, z, en);
+input clk, si, clr,z, en;
+output [8:0] q;
+reg [8:0] tmp;
+
+always @(posedge clk or posedge clr)
+
+ begin
+  if (clr) tmp = 9'b000000000; 
+  else
+    if (en) begin
+    tmp = tmp >> 1;
+    tmp[8] = si;
+    end else tmp = tmp;
+ end
+ 
+ assign q = z?tmp:9'bzzzzzzzzz;
+endmodule
+
+
 /*
 16-bit dynamic shift register.
 
