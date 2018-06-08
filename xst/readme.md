@@ -60,3 +60,26 @@
 [Py RTL](http://ucsbarchlab.github.io/PyRTL/)
 
 [Rapid FPGA Design in Python Using MyHDL](http://mirror.thelifeofkenneth.com/lib/electronics_archive/RapidFpgaDesignInPythonUsingMyhdl.pdf)
+
+
+
+** programmable state machine
+
+[Creating Embedded Microcontrollers]()
+
+[Finite State Machines, Programmable Logic Devices, and the Crux of Growing Complexity]()
+
+[A Programmable State Machine Architecture for Packet Processing]()
+
+[ Finite State Machine Design with Programmable Logic](http://www2.elo.utfsm.cl/~lsb/elo211/aplicaciones/katz/chapter10/chapter10.doc1.html)
+
+[State Machine design](noel.feld.cvut.cz/hw/amd/90005a.pdf)
+
+[ROM based sequencer](http://www.science.smith.edu/dftwiki/images/4/49/ROMBasedSequencer.pdf)
+
+[Synthesis of Moore Finite State Machines based on pseudoequivalent states](https://ac.els-cdn.com/S1474667015373304/1-s2.0-S1474667015373304-main.pdf?_tid=2d48619b-6fdb-48fb-b837-d630c25a6821&acdnat=1528491450_60e6ce62562803f8c5ce604e36d4d562)
+
+[xapp267 picoblaze 8-bit-microncontroller for virtex II Series Devices]()
+[xapp213 picoblaze 8-bit-microncontroller for virtex E and Spartan-II/IIE Devices]()
+[xapp293 I2C Video Peripheral Loader]()
+[Dynamic Microcontroller in an XC4000 FPGA ken chapman]()
