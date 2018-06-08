@@ -59,3 +59,24 @@
 [Computation structures MIT 6004](http://computationstructures.org/)
 
 [MIT 6004](https://6004.csail.mit.edu/)
+
+** verilog reference guide xilinx pdf
+
+** microcontroller fpga pdf
+
+
+** app note microcontroller fpga
+
+[Dynamic Microcontroller in an XC4000 FPGA](http://web.engr.oregonstate.edu/~sllu/fpga/microcnt.pdf)
+
+December 1994 Application Note BY KEN CHAPMAN xilinx
+
+[Design Issues on Using FPGA-Based I&C Systems in Nuclear Reactors](http://www.iaea.org/inis/collection/NCLCollectionStore/_Public/47/017/47017717.pdf)
+
+[Connect a ARM Microcontroller to a FPGA using its Extended Memory Interface (EMI)](https://elinux.org Connect_a_ARM_Microcontroller_to_a_FPGA_using_its_Extended_Memory_Interface_(EMI))
+
+
+[https://www.massey.ac.nz/~mjjohnso/notes/59735/seminars/07217579.doc](Studies in parallel and distributed systems Parallel Computing Using FPGA)
+
+
+[Verilog code for Microcontroller](http://www.fpga4student.com/2016/11/verilog-hdl-implementation-of-micro.html)
