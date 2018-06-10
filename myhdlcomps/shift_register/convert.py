@@ -51,13 +51,60 @@ def convert_delay_1(hdl):
   delayq = delay_1(dout, din, clk, Nbits)
   delayq.convert(hdl=hdl, name='delay_1')
 
+def convert_diff_disp(hdl):
+
+  Nbits = 16
+  dout = Signal(intbv(0)[Nbits:])
+  din = Signal(intbv(0)[Nbits:])
+  disp = Signal(intbv(0)[3:])
+  clk = Signal(bool(0))
+
+  diff_dispq = diff_disp(dout, din, clk, disp, Nbits)
+  diff_dispq.convert(hdl=hdl, name='diff_disp')
+
+def convert_logical_slr(hdl):
+
+  Nbits = 16
+  dout = Signal(intbv(0)[Nbits:])
+  din = Signal(intbv(0)[Nbits:])
+  disp = Signal(intbv(0)[2:])
+
+  logical_slrq = logical_slr(din, disp, dout)
+  logical_slrq.convert(hdl=hdl, name='logical_slr')
+
+def convert_logical_slr_b(hdl):
+
+  Nbits = 16
+  dout = Signal(intbv(0)[Nbits:])
+  din = Signal(intbv(0)[Nbits:])
+  disp = Signal(intbv(0)[2:])
+
+  logical_slr_bq = logical_slr_b(din, disp, dout)
+  logical_slr_bq.convert(hdl=hdl, name='logical_slr_b')
+
+
+def convert_comparator(hdl):
+  Nbits = 16
+  gt = Signal(bool(0))
+  eq = Signal(bool(0))
+  lt = Signal(bool(0))
+  A = Signal(intbv(0)[Nbits:])
+  B = Signal(intbv(0)[Nbits:])
+
+  comparatorq = comparator(A, B, gt, eq, lt)
+  comparatorq.convert(hdl=hdl, name='comparatorq')
+
+
 
 def main():   
     convert_srl(hdl='Verilog')
     convert_srlpiso(hdl='Verilog')
     convert_ram(hdl='Verilog')
     convert_delay_1(hdl='Verilog')
-    
+    convert_diff_disp(hdl='Verilog')
+    convert_logical_slr(hdl='Verilog')
+    convert_logical_slr_b(hdl='Verilog')
+    convert_comparator(hdl='Verilog')
     
 if __name__ == '__main__':
     main()

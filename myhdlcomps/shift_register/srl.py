@@ -92,3 +92,61 @@ def delay_1(dout, din, clk, Nbits = 8):
  
     return write
 
+@block
+def diff_disp(dout, din, clk, disp, Nbits = 8):
+ 
+    mem = Signal(intbv(0)[Nbits:])
+   
+    
+    @always(clk.posedge)
+    def write():
+            dout.next = din - mem >> disp
+            mem.next = din
+                
+ 
+    return write
+
+@block
+def logical_slr(din, disp, dout):
+    
+    @always(din or disp)
+    def proc():
+        if disp == 0:
+            dout.next = din
+        elif disp == 1:
+            dout.next = din << 1
+        elif disp == 2:
+            dout.next = din << 2
+        elif disp == 3:
+            dout.next = din << 3
+ 
+    return proc
+
+@block
+def logical_slr_b(din, disp, dout):
+    
+    @always(din or disp)
+    def proc():
+            dout.next = din << disp
+ 
+    return proc
+
+@block
+def comparator(A,B,gt, eq, lt):
+
+  @always_comb
+  def proc():
+   if A > B:
+      gt.next  = 1
+      eq.next = 0
+      lt.next = 0
+   elif A < B:
+      gt.next  = 0
+      eq.next = 0
+      lt.next = 1
+   else:
+      gt.next  = 0
+      eq.next = 1
+      lt.next = 0
+
+  return proc
