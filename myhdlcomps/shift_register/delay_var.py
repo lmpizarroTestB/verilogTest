@@ -28,10 +28,10 @@ def convert (hdl):
   dut = delay_v(dout, din, clk, delay_, Nbits, depth)
   dut.convert(hdl=hdl, name='delay_v')
 
-
-
+ddin=[]
+ddout=[]
 @block
-def tb():
+def tb(del_):
     HALF_PERIOD = delay(10)
 
     Nbits = 8
@@ -48,15 +48,16 @@ def tb():
     def clockGen():
         clk.next = not clk
 
+
     @instance
     def stimulus():
         for i in range(10):
-            delay_.next = 6 
-            din.next = 68 
+            delay_.next = del_ 
+            din.next = 68
             yield clk.posedge
 
         for i in range(10):
-            delay_.next = 6 
+            delay_.next = del_ 
             din.next = 34 
             yield clk.posedge
         raise StopSimulation()
@@ -67,8 +68,9 @@ def tb():
       while 1:
         yield clk.posedge
         yield delay(1)
-        print(" pos %s   %s   %s  %s" % (int(clk), int(din), int(dout),
-            int(delay_)))
+        ddout.append(int(dout))
+        ddin.append(int(din))
+        print(" pos %s   %s   %s  %s" % (int(clk), int(din), int(dout), int(delay_)))
         #yield clk.negedge
         #yield delay(1)
         #print(" neg %s   %s      %s" % (int(clk), int(d), int(q)))
@@ -78,7 +80,8 @@ def tb():
 
 
 if __name__ == '__main__':
-  tb = tb()
+  tb = tb(6)
   tb.run_sim()
   convert('Verilog')
-  print tb
+  print ddin
+  print ddout
