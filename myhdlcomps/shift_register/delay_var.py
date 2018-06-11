@@ -2,86 +2,92 @@ from myhdl import block, always, instance, Signal, \
     ResetSignal, modbv, delay, StopSimulation, \
     intbv
 
-@block
-def delay_v(dout, din, clk, delay, Nbits = 8, depth = 16):
- 
-    mem = [Signal(intbv(0)[Nbits:]) for i in range(depth)]
-   
-    
-    @always(clk.posedge)
-    def write():
-      dout.next = mem[delay]
-      for i in range(delay):
-          mem[i+1].next = mem[i]
-      mem[0].next = din
-    return write
+import biggles
 
-def convert (hdl):
+from srl import delay_var
+
+def convert (hdl, name):
   Nbits = 8
-  depth = 16
+  NbDelay = 5
+  depth = 2**NbDelay
+
   clk  = Signal(bool(0))
   dout = Signal(intbv(0)[Nbits:])
   din = Signal(intbv(0)[Nbits:])
-  delay_ = Signal(intbv(0)[4:])
+  delay_ = Signal(intbv(0)[NbDelay:])
 
 
-  dut = delay_v(dout, din, clk, delay_, Nbits, depth)
-  dut.convert(hdl=hdl, name='delay_v')
+  dut = delay_var(dout, din, clk, delay_, Nbits, depth)
+  dut.convert(hdl=hdl, name=name)
 
-ddin=[]
 ddout=[]
 @block
-def tb(del_):
-    HALF_PERIOD = delay(10)
+def tb(del_, ddin):
+  HALF_PERIOD = delay(10)
 
-    Nbits = 8
-    depth = 16
-    clk  = Signal(bool(0))
-    dout = Signal(intbv(0)[Nbits:])
-    din = Signal(intbv(0)[Nbits:])
-    delay_ = Signal(intbv(0)[4:])
+  Nbits = 8
+  NbDelay = 5
+  depth = 2**NbDelay
 
 
-    dut = delay_v(dout, din, clk, delay_, Nbits, depth)
+  clk  = Signal(bool(0))
+  dout = Signal(intbv(0)[Nbits:])
+  din = Signal(intbv(0)[Nbits:])
+  delay_ = Signal(intbv(0)[NbDelay:])
 
-    @always(HALF_PERIOD)
-    def clockGen():
-        clk.next = not clk
 
+  dut = delay_var(dout, din, clk, delay_, Nbits, depth)
 
-    @instance
-    def stimulus():
-        for i in range(10):
+  @always(HALF_PERIOD)
+  def clockGen():
+    clk.next = not clk
+
+  @instance
+  def stimulus():
+        for i in range(len(ddin)):
             delay_.next = del_ 
-            din.next = 68
+            din.next = ddin[i]
             yield clk.posedge
 
-        for i in range(10):
-            delay_.next = del_ 
-            din.next = 34 
-            yield clk.posedge
         raise StopSimulation()
 
-    @instance
-    def monitor():
+  @instance
+  def monitor():
       print("clk  din  dout")
       while 1:
         yield clk.posedge
         yield delay(1)
-        ddout.append(int(dout))
-        ddin.append(int(din))
         print(" pos %s   %s   %s  %s" % (int(clk), int(din), int(dout), int(delay_)))
+        ddout.append(int(dout))
         #yield clk.negedge
         #yield delay(1)
         #print(" neg %s   %s      %s" % (int(clk), int(d), int(q)))
 
 
-    return clockGen, stimulus, monitor, dut
+  return clockGen, stimulus, monitor, dut
+
+def main():
+  aone = Signal(intbv(1)[8:])  
+
+  ddin=[1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1]
+  x = [i for i in range(len(ddin))]
+  tbr = tb(6, ddin)
+  tbr.run_sim()
+  convert('Verilog', "delay_var")
+
+  print len(ddin), len(ddout)
+
+  ddout.append(0)
+  p = biggles.FramedPlot()
+  p.add( biggles.Curve(x, ddout, color="red") )
+  p.add( biggles.Curve(x, ddin, color="blue") )
+  p.write_img( 400, 400, "example2.png" )
+  p.show()
 
 
+
+from myhdl import Simulation
 if __name__ == '__main__':
-  tb = tb(6)
-  tb.run_sim()
-  convert('Verilog')
-  print ddin
-  print ddout
+    main()
+
+

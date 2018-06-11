@@ -218,3 +218,19 @@ def attenuator(sig, att, sig_out):
         elif att == 15:
             sig_out.next = ((sig>>8) + (sig>>7))>>2
     return atte
+
+@block
+def delay_var(dout, din, clk, delay, Nbits = 8, depth = 16):
+ 
+    mem = [Signal(intbv(0)[Nbits:]) for i in range(depth)]
+   
+    
+    @always(clk.posedge)
+    def write():
+      dout.next = mem[delay]
+      for i in range(delay):
+          mem[i+1].next = mem[i]
+      mem[0].next = din
+    return write
+
+
