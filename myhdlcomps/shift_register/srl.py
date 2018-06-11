@@ -73,7 +73,6 @@ def ram(dout, din, addr, we, clk, depth=128):
     @always_comb
     def read():
         dout.next = mem[addr]
-
     return write, read
 
 @block
@@ -86,8 +85,6 @@ def delay_1(dout, din, clk, Nbits = 8):
     def write():
             dout.next = mem
             mem.next = din
-                
- 
     return write
 
 @block
@@ -100,8 +97,6 @@ def diff_disp(dout, din, clk, disp, Nbits = 8):
     def write():
             dout.next = din - mem >> disp
             mem.next = din
-                
- 
     return write
 
 @block
@@ -226,11 +221,11 @@ def delay_var(dout, din, clk, delay, Nbits = 8, depth = 16):
    
     
     @always(clk.posedge)
-    def write():
+    def delay_v():
       dout.next = mem[delay]
       for i in range(delay):
           mem[i+1].next = mem[i]
       mem[0].next = din
-    return write
+    return delay_v
 
 

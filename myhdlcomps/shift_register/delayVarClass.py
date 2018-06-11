@@ -3,6 +3,8 @@ from myhdl import always, instance, Signal, \
     intbv, Simulation, instances
 
 from srl import delay_var
+from genSignal import genSignal
+
 
 import biggles
 
@@ -31,7 +33,7 @@ class Delay_Var():
   def convert (self, hdl='Verilog', name='delay_var'):
     self.dut.convert(hdl=hdl, name=name)
 
-  def tb(self, ddin):
+  def tb(self, ddin, dd):
     HALF_PERIOD = delay(10)
 
     @always(HALF_PERIOD)
@@ -41,7 +43,7 @@ class Delay_Var():
     @instance
     def stimulus():
         for i in range(len(ddin)):
-            self.delay_.next = self.NbDelay 
+            self.delay_.next = dd 
             self.din.next = ddin[i]
             yield self.clk.posedge
 
@@ -61,16 +63,9 @@ class Delay_Var():
         #print(" neg %s   %s      %s" % (int(clk), int(d), int(q)))
 
 
-    return  instances()
-
-def genSignal():
-  a = [1]*5
-  b = [0]*7
-  c = [2] * 4
-
-  sig=a +  b +  c + b
-
-  return sig
+    #return  instances()
+    return clockGen, stimulus, monitor, self.dut
+    
 
 
 def main():
@@ -80,7 +75,7 @@ def main():
   dv = Delay_Var()
   dv.convert()
 
-  tbr = dv.tb(ddin)
+  tbr = dv.tb(ddin, 4)
   sim = Simulation(tbr)
   sim.run()
 
@@ -92,5 +87,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
