@@ -94,6 +94,18 @@ def convert_comparator(hdl):
   comparatorq = comparator(A, B, gt, eq, lt)
   comparatorq.convert(hdl=hdl, name='comparatorq')
 
+def convert_discriminator(hdl):
+  Nbits = 16
+  wll = Signal(bool(0))
+  wul = Signal(bool(0))
+  out = Signal(bool(0))
+  sig = Signal(intbv(0)[Nbits:])
+  sig_out = Signal(intbv(0)[Nbits:])
+  data = Signal(intbv(0)[Nbits:])
+
+  discriminatorq = discriminator(sig, data, wll, wul, out, sig_out, Nbits)
+  discriminatorq.convert(hdl=hdl, name='discriminatorq')
+
 
 
 def main():   
@@ -105,6 +117,7 @@ def main():
     convert_logical_slr(hdl='Verilog')
     convert_logical_slr_b(hdl='Verilog')
     convert_comparator(hdl='Verilog')
+    convert_discriminator(hdl='Verilog')
     
 if __name__ == '__main__':
     main()
