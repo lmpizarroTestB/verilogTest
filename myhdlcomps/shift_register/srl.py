@@ -58,8 +58,6 @@ def srlpiso(clk, pi, load, so):
          q[8:1] = q[7:]
 
     return seq
-
-
  
 @block
 def ram(dout, din, addr, we, clk, depth=128):
