@@ -106,6 +106,15 @@ def convert_discriminator(hdl):
   discriminatorq = discriminator(sig, data, wll, wul, out, sig_out, Nbits)
   discriminatorq.convert(hdl=hdl, name='discriminatorq')
 
+def convert_attenuator(hdl):
+  Nbits = 16
+  sig = Signal(intbv(0)[Nbits:])
+  sig_out = Signal(intbv(0)[Nbits:])
+  att = Signal(intbv(0)[4:])
+
+  attenuatorq = attenuator(sig, att, sig_out)
+  attenuatorq.convert(hdl=hdl, name='attenuator')
+
 
 
 def main():   
@@ -118,6 +127,7 @@ def main():
     convert_logical_slr_b(hdl='Verilog')
     convert_comparator(hdl='Verilog')
     convert_discriminator(hdl='Verilog')
+    convert_attenuator(hdl='Verilog')
     
 if __name__ == '__main__':
     main()
