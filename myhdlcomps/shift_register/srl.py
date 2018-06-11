@@ -159,7 +159,7 @@ def discriminator (sig, data, wll, wul, out, sig_out, Nbits):
             out.next = 0
             sig_out.next = 0
 
-    @always (wll.posedge or wul.posedge)
+    @always (wll.posedge, wul.posedge)
     def setul():
         if wll:
             if data <= lower_level:
@@ -168,7 +168,7 @@ def discriminator (sig, data, wll, wul, out, sig_out, Nbits):
               upper_level.next = data
         elif wul:
             if data >= upper_level:
-                lower_level.next = upper_level - 1
+                lower_level.next = upper_level # - 1
             else:
                 lower_level.next = data
 

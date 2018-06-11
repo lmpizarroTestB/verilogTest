@@ -81,7 +81,6 @@ def main():
   p = biggles.FramedPlot()
   p.add( biggles.Curve(x, ddout, color="red") )
   p.add( biggles.Curve(x, ddin, color="blue") )
-  p.write_img( 400, 400, "example2.png" )
   p.show()
 
 
