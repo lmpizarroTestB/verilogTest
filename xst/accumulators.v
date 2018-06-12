@@ -267,23 +267,26 @@ end
 
 endmodule
 
-module adder_4_la_b(Cin, A, B, S, Cout);
+module adder_4_la_b(Cin, A, B, S, Cout, p0, g0);
 input Cin; 
 output Cout;
+wire p, g;
+output  p0, g0;
 
 input [3:0] A;
 input [3:0] B;
 output [3:0] S; 
 wire [3:0] C; 
-wire p, g;
 
-carry_la cla(Cin, A,B,C, p, g);
+carry_la cla(.Cin(Cin), .A(A),.B(B),.C(C), .p(p), .g(g));
 
 assign S[0] = (A[0] ^ B[0]) ^ Cin;
 assign S[1] = (A[1] ^ B[1]) ^ C[0];
 assign S[2] = (A[2] ^ B[2]) ^ C[1];
 assign S[3] = (A[3] ^ B[3]) ^ C[2];
 assign Cout = C[3]; 
+assign p0 = p;
+assign g0 = g;
 
 endmodule
 
