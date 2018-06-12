@@ -1,7 +1,7 @@
 `include "accumulators.v"
 
 
-module tb_adder();
+module tb_adder16_cla();
  
   reg [15:0] a, b;
   output [15:0] out;
