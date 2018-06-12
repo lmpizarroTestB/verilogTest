@@ -228,4 +228,77 @@ def delay_var(dout, din, clk, delay, Nbits = 8, depth = 16):
       mem[0].next = din
     return delay_v
 
+@block
+def multiplier_4bits(clk, B, A, out, Nbits=4):
+    '''
+      out = B * A
 
+            B
+           *A
+           --
+           out
+    '''
+
+    mem = [Signal(intbv(0)[2*Nbits:]) for i in range(Nbits)]
+
+
+    @always(clk.posedge)
+    def mult_():
+        C = (mem[0] + mem[1]) + (mem[2] + mem[3])
+
+    @always_comb
+    def calcs():
+       mem[0][5:].next = A[0]&B
+       mem[1][6:].next =  A[1]&B
+       mem[2][7:].next =  A[3]&B
+       mem[3][8:].next =  A[4]&B
+
+       mem[0][8:4].next = 0
+       mem[1][8:5].next = 0
+       mem[1][0].next = 0
+       mem[2][8:6].next = 0
+       mem[2][2:0].next = 0
+       mem[3][3:0].next = 0
+
+    return mult_, calcs 
+
+@block
+def partial_mult( B, A, mem0, mem1, mem2, mem3):
+
+   @always(A,B)
+   def calcs():
+    while(1):
+       mem0[5:].next = A[0]&B
+       mem1[6:].next =  A[1]&B
+       mem2[7:].next =  A[3]&B
+       mem3[8:].next =  A[4]&B
+
+       mem0[8:4].next = 0
+       mem1[8:5].next = 0
+       mem1[0].next = 0
+       mem2[8:6].next = 0
+       mem2[2:0].next = 0
+       mem3[3:0].next = 0
+
+   return calcs 
+
+@block
+def full_adder(Cin, A,B, S, Cout):
+
+   @always(A,B)
+   def calcs():
+        axorb = A^B
+        S.next = axorb^Cin
+        Cout.next = A&B | axorb&Cin
+
+   return calcs 
+
+@block
+def adder(Cin, A,B, S, Cout):
+
+   @always(A,B)
+   def calcs():
+      C1 = 0
+      full_adder(Cin, A[0], B[0], S[0], C1)
+      full_adder(C1, A[1], B[1], S[1], Cout)
+   return calcs 

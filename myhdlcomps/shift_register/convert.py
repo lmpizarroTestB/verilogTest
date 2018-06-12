@@ -116,6 +116,50 @@ def convert_attenuator(hdl):
   attenuatorq.convert(hdl=hdl, name='attenuator')
 
 
+def convert_partial_mult(hdl):
+  Nbits = 4
+
+  A = Signal(intbv(0)[Nbits:])
+  B = Signal(intbv(0)[Nbits:])
+  mem0 = Signal(intbv(0)[2*Nbits:])
+  mem1 = Signal(intbv(0)[2*Nbits:])
+  mem2 = Signal(intbv(0)[2*Nbits:])
+  mem3 = Signal(intbv(0)[2*Nbits:])
+
+  dut = partial_mult(B, A, mem0, mem1, mem2, mem3)
+  dut.convert(hdl=hdl, name='partial_mult')
+
+def convert_mult_4bits(hdl):
+  Nbits = 4
+
+  A = Signal(intbv(0)[Nbits:])
+  B = Signal(intbv(0)[Nbits:])
+  C = Signal(intbv(0)[2*Nbits:])
+
+  dut = multiplier_4bits(B, A, C, Nbits)
+  dut.convert(hdl=hdl, name='multiplier_4bits')
+
+
+def convert_full_adder(hdl):
+    Cin = Signal(bool(0))
+    A = Signal(bool(0))
+    B = Signal(bool(0))
+    S = Signal(bool(0))
+    Cout = Signal(bool(0))
+
+    dut = full_adder(Cin, A, B, S, Cout)
+    dut.convert(hdl=hdl, name="full_adder")
+
+def convert_adder(hdl):
+    Cin = Signal(bool(0))
+    A = Signal(intbv(0)[2:])
+    B = Signal(intbv(0)[2:])
+    S = Signal(intbv(0)[2:])
+    Cout = Signal(bool(0))
+
+    dut = adder(Cin, A, B, S, Cout)
+    dut.convert(hdl=hdl, name="adder")
+
 
 def main():   
     convert_srl(hdl='Verilog')
@@ -128,6 +172,10 @@ def main():
     convert_comparator(hdl='Verilog')
     convert_discriminator(hdl='Verilog')
     convert_attenuator(hdl='Verilog')
+    convert_partial_mult(hdl='Verilog')
+    convert_mult_4bits(hdl='Verilog')
+    convert_full_adder(hdl='Verilog')
+    convert_adder(hdl='Verilog')
     
 if __name__ == '__main__':
     main()
