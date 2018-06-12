@@ -13,7 +13,9 @@ module tb_adder();
     .A(a),
     .B(b),
     .S(out),
-    .Cout(cout)
+    .Cout(cout),
+    .p1(p),
+    .g1(g)
   );
  
   initial begin
