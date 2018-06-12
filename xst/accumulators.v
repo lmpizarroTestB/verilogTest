@@ -173,3 +173,118 @@ assign C = a0 + a1 + a2 + a3;
 
 endmodule
 
+
+module full_adder(Cin, A, B, S, Cout);
+input Cin, A, B;
+output S, Cout;
+
+//assign S = (A^B)^Cin;
+//assign Cout = (A&B) | ((A^B)&Cin);
+
+assign S = (A^B)^Cin;
+assign Cout = (A&B) | (A&Cin) | (B&Cin);
+endmodule
+
+module adder_4(Cin, A, B, S, Cout);
+ input Cin; 
+ input [3:0] A; 
+ input [3:0] B;
+ output [3:0] S; 
+ output Cout;
+
+ wire c0, c1, c2, c3;
+
+ full_adder fa1(Cin, A[0], B[0], S[0], c1);
+ full_adder fa2(c1, A[1], B[1], S[1], c2);
+ full_adder fa3(c2, A[2], B[2], S[2], c3);
+ full_adder fa4(c3, A[3], B[3], S[3], Cout);
+
+endmodule
+
+
+module adder_4_la(Cin, A, B, S, Cout);
+input Cin; 
+input [3:0] A;
+input [3:0] B;
+output [3:0] S; 
+output Cout;
+
+wire p[3:0];
+wire g[3:0];
+wire c[3:0];
+
+assign p[0] = A[0] + B[0];
+assign p[1] = A[1] + B[1];
+assign p[2] = A[2] + B[2];
+assign p[3] = A[3] + B[3];
+
+assign g[0] = A[0] & B[0];
+assign g[1] = A[1] & B[1];
+assign g[2] = A[2] & B[2];
+assign g[3] = A[3] & B[3];
+
+assign c[0] = g[0] + p[0] & Cin;
+assign c[1] = g[1] + p[1] & c[0];
+assign c[2] = g[2] + p[2] & c[1];
+assign c[3] = g[3] + p[3] & c[2];
+
+assign S[0] = (A[0]^B[0]) ^ Cin;
+assign S[1] = (A[1]^B[1]) ^ c[0];
+assign S[2] = (A[2]^B[2]) ^ c[1];
+assign S[3] = (A[3]^B[3]) ^ c[2];
+assign Cout = c[3]; 
+
+endmodule
+
+module carry_la (Cin, A, B, C, p, g);
+input Cin;
+input [3:0] A;
+input [3:0] B;
+output [3:0] C;
+output p, g;
+
+reg p0, p1, p2, p3;
+reg g0, g1, g2, g3;
+
+always @(*) begin
+  p0 <= (A[0] + B[0]);
+  p1 <= (A[1] + B[1]);
+  p2 <= (A[2] + B[2]);
+  p3 <= (A[3] + B[3]);
+
+  g0 <= (A[0] & B[0]);
+  g1 <= (A[1] & B[1]);
+  g2 <= (A[2] & B[2]);
+  g3 <= (A[3] & B[3]);
+end
+
+  assign C[0] = g0 + (p0&Cin); 
+  assign C[1] = g1 + (p1&g0) + (p1&p0&Cin); 
+  assign C[2] = g2 + (p2&g1) + (p2&p1&g0) + (p2&p1&p0&Cin); 
+  assign C[3] = g3 + (p3&g2) + (p3&p2&g1) + (p3&p2&p1&g0) + (p3&p2&p1&p0&Cin); 
+  assign p = p3;
+  assign g = g3;
+
+endmodule
+
+module adder_4_la_b(Cin, A, B, S, Cout);
+input Cin; 
+output Cout;
+
+input [3:0] A;
+input [3:0] B;
+output [3:0] S; 
+wire [3:0] C; 
+wire p, g;
+
+carry_la cla(Cin, A,B,C, p, g);
+
+assign S[0] = (A[0] ^ B[0]) ^ Cin;
+assign S[1] = (A[1] ^ B[1]) ^ C[0];
+assign S[2] = (A[2] ^ B[2]) ^ C[1];
+assign S[3] = (A[3] ^ B[3]) ^ C[2];
+assign Cout = C[3]; 
+
+endmodule
+
+
