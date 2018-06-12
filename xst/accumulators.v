@@ -241,10 +241,12 @@ input Cin;
 input [3:0] A;
 input [3:0] B;
 output [3:0] C;
-output p, g;
+output [3:0] p; 
+output [3:0] g;
 
 reg p0, p1, p2, p3;
 reg g0, g1, g2, g3;
+
 
 always @(*) begin
   p0 <= (A[0] + B[0]);
@@ -262,22 +264,23 @@ end
   assign C[1] = g1 + (p1&g0) + (p1&p0&Cin); 
   assign C[2] = g2 + (p2&g1) + (p2&p1&g0) + (p2&p1&p0&Cin); 
   assign C[3] = g3 + (p3&g2) + (p3&p2&g1) + (p3&p2&p1&g0) + (p3&p2&p1&p0&Cin); 
-  assign p = p3;
-  assign g = g3;
+  assign p = {p0,p1,p2,p3};
+  assign g = {g0,g1,g2,g3};
 
 endmodule
 
-module adder_4_la_b(Cin, A, B, S, Cout, p1, g1);
+module adder_4_la_b(Cin, A, B, S, Cout, p, g);
 input Cin; 
 output Cout;
-output  p1, g1;
+output [3:0] p; 
+output [3:0] g;
 
 input [3:0] A;
 input [3:0] B;
 output [3:0] S; 
 wire [3:0] C; 
 
-carry_la cla(.Cin(Cin), .A(A),.B(B),.C(C), .p(p1), .g(g1));
+carry_la cla(.Cin(Cin), .A(A),.B(B),.C(C), .p(p), .g(g));
 
 assign S[0] = (A[0] ^ B[0]) ^ Cin;
 assign S[1] = (A[1] ^ B[1]) ^ C[0];
@@ -287,16 +290,37 @@ assign Cout = C[3];
 
 endmodule
 
+
+/*
+---------------------------------------
+---------------------------------------
+*/
 module carry_la_mod (Cin, P, G, C);
 input Cin;
-input [3:0] P;
-input [3:0] G;
+input [15:0] P;
+input [15:0] G;
 output [3:0] C;
 
-  assign C[0] = g[0] + (p[0]&Cin); 
-  assign C[1] = g[1] + (p[1]&g[0]) + (p[1]&p[0]&Cin); 
-  assign C[2] = g[2] + (p[2]&g[1]) + (p[2]&p[1]&g[0]) + (p[2]&p[1]&p[0]&Cin); 
-  assign C[3] = g[3] + (p[3]&g[2]) + (p[3]&p[2]&g[1]) + (p[3]&p[2]&p[1]&g[0]) + (p[3]&p[2]&p[1]&p[0]&Cin); 
+reg P0, P1, P2, P3;
+reg G0, G1, G2, G3;
+
+always @(*) begin
+ P0<= &P[3:0];
+ P1<= &P[7:4];
+ P2<= &P[11:8];
+ P3<= &P[15:12];
+
+ G0<=G[3] | P[3]&G[2] | P[3]&P[2]&G[1] | P[3]&P[2]&P[1]&G[0];
+ G1<=G[7] | P[7]&G[6] | P[7]&P[6]&G[5] | P[7]&P[6]&P[5]&G[4];
+ G2<=G[11] | P[11]&G[10] | P[11]&P[10]&G[9] | P[11]&P[10]&P[9]&G[8];
+ G3<=G[15] | P[15]&G[14] | P[15]&P[14]&G[13] | P[15]&P[14]&P[13]&G[12];
+end
+
+
+  assign C[0] = G0 + (P0&Cin); 
+  assign C[1] = G1 + (P1&G0) + (P1&P0&Cin); 
+  assign C[2] = G2 + (P2&G1) + (P2&P1&G0) + (P2&P1&P0&Cin); 
+  assign C[3] = G3 + (P3&G2) + (P3&P2&G1) + (P3&P2&P1&G0) + (P3&P2&P1&P0&Cin); 
 
 endmodule
 
@@ -310,15 +334,15 @@ output Cout;
 
 wire Co;
 
-wire [3:0] p;
-wire [3:0] g;
+wire [15:0] p;
+wire [15:0] g;
 wire [3:0] c;
 
 carry_la_mod ca_la(.Cin(Cin), .P(p), .G(g), .C(c));
-adder_4_la_b a41 (.Cin(Cin), .A(A[3:0]), .B(B[3:0]), .S(S[3:0]), .Cout(Co), .p1(p[0]), .g1(g[0]));
-adder_4_la_b a42 (.Cin(Cin), .A(A[7:4]), .B(B[7:4]), .S(S[7:4]), .Cout(Co), .p1(p[1]), .g1(g[1]));
-adder_4_la_b a43 (.Cin(Cin), .A(A[11:8]), .B(B[11:8]), .S(S[11:8]), .Cout(Co), .p1(p[2]), .g1(g[2]));
-adder_4_la_b a44 (.Cin(Cin), .A(A[15:12]), .B(B[15:12]), .S(S[15:12]), .Cout(Co), .p1(p[3]), .g1(g[3]));
+adder_4_la_b a41 (.Cin(Cin), .A(A[3:0]), .B(B[3:0]), .S(S[3:0]), .Cout(Co), .p(p[3:0]), .g(g[3:0]));
+adder_4_la_b a42 (.Cin(c[0]), .A(A[7:4]), .B(B[7:4]), .S(S[7:4]), .Cout(Co), .p(p[7:4]), .g(g[7:4]));
+adder_4_la_b a43 (.Cin(c[1]), .A(A[11:8]), .B(B[11:8]), .S(S[11:8]), .Cout(Co), .p(p[11:8]), .g(g[11:8]));
+adder_4_la_b a44 (.Cin(c[2]), .A(A[15:12]), .B(B[15:12]), .S(S[15:12]), .Cout(Co), .p(p[15:12]), .g(g[15:12]));
 
 assign Cout = c[3];
 

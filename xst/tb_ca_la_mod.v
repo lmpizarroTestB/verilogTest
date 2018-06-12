@@ -1,24 +1,24 @@
 `include "accumulators.v"
 
 
-module tb_adder();
+module tb_ca_la_mod();
  
-  reg [15:0] a, b;
-  output [15:0] out;
+  reg [15:0] a; 
+  reg [15:0] b;
+  wire [3:0] out;
   reg cin; 
   wire cout, p, g;
  
-  adder_16  DUT (
+  carry_la_mod   DUT (
     .Cin(cin),
-    .A(a),
-    .B(b),
-    .S(out),
-    .Cout(cout)
+    .P(a),
+    .G(b),
+    .C(out)
   );
  
   initial begin
     $dumpfile("simple.vcd");
-    $monitor ("time %g   A %b   B %b   C %b   Cin %b Cout %b ",$time, a, b, out, cin, cout);
+    $monitor ("time %g   A %b   B %b   C %b   Cin %b",$time, a, b, out, cin);
     $dumpvars(0, DUT);
     cin = 1;
     a = 16'b0000000000000000;
@@ -36,14 +36,12 @@ module tb_adder();
     a = 16'b0000000000001100; cin = 0;
     b = 16'b0000000000001010;
     #20
-    a = 16'b1111111111111111; cin = 0;
-    b = 16'b0001000100010001;
+    a = 16'b0000000000001111; cin = 0;
+    b = 16'b0000000000001111;
     #20
-    a = 16'b1111111111111111; cin = 0;
-    b = 16'b1111111111111111;
+    a = 16'b0000000000001111; cin = 0;
+    b = 16'b0000000000000001;
     #20
-    a = 16'b0000000000011100;
-    b = 16'b0000000000010011;
     $finish;
   end
  

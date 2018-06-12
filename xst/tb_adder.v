@@ -6,7 +6,9 @@ module tb_adder();
   reg [3:0] a, b;
   wire [3:0] out;
   reg cin; 
-  wire cout, p, g;
+  wire cout; 
+  wire [3:0] p; 
+  wire [3:0] g;
  
   adder_4_la_b  DUT (
     .Cin(cin),
@@ -14,8 +16,8 @@ module tb_adder();
     .B(b),
     .S(out),
     .Cout(cout),
-    .p1(p),
-    .g1(g)
+    .p(p),
+    .g(g)
   );
  
   initial begin
@@ -39,6 +41,8 @@ module tb_adder();
     b = 4'b1010;
     a = 4'b1111; cin = 0;
     b = 4'b1111;
+    a = 4'b1111; cin = 0;
+    b = 4'b0001;
     #20
     $finish;
   end
