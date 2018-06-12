@@ -22,6 +22,9 @@
 [Low Pass FIR Filter verilog code](http://www.rfwireless-world.com/source-code/VERILOG/Low-pass-FIR-filter-verilog-code.html)
 
 
+[FPGA IMPLEMENTATION OF DIGITAL FILTERS](http://www.ittc.ku.edu/Projects/FPGA/Digital_Filters.pdf)
+
+[Introduction to DSP using FPGA](http://www.sase.com.ar/2011/files/2010/11/SASE2011-DSP_con_FPGA.pdf)
 
 ** Seven Segments
 
