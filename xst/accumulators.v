@@ -347,7 +347,7 @@ output [7:0] C;
 
 reg [7:0] tmp;
 
-function mult_4x3;
+function  [7:0] mult_4x3;
 input [3:0] A;
 
 case (A)
@@ -356,7 +356,7 @@ case (A)
   4'h2: mult_4x3=8'h06;
   4'h3: mult_4x3=8'h09;
   4'h4: mult_4x3=8'h0C;
-  4'h5: mult_4x3=8'hFF;
+  4'h5: mult_4x3=8'h0F;
   4'h6: mult_4x3=8'h12;
   4'h7: mult_4x3=8'h15;
   4'h8: mult_4x3=8'h18;
@@ -370,13 +370,13 @@ case (A)
 endcase
 endfunction
 
-function mult_4x5;
+function  [7:0] mult_4x5;
 input [3:0] A;
 case (A)
   4'h0: mult_4x5=8'h00;
   4'h1: mult_4x5=8'h05;
   4'h2: mult_4x5=8'h0A;
-  4'h3: mult_4x5=8'hFF;
+  4'h3: mult_4x5=8'h0F;
   4'h4: mult_4x5=8'h0C;
   4'h5: mult_4x5=8'h14;
   4'h6: mult_4x5=8'h1E;
@@ -392,7 +392,7 @@ case (A)
 endcase
 endfunction
 
-function mult_4x7;
+function  [7:0] mult_4x7;
 input [3:0] A;
 case (A)
   4'h0: mult_4x7=8'h00;
@@ -414,7 +414,7 @@ case (A)
 endcase
 endfunction
 
-function mult_4x9;
+function  [7:0] mult_4x9;
 input [3:0] A;
 case (A)
   4'h0: mult_4x9=8'h00;
@@ -436,7 +436,7 @@ case (A)
 endcase
 endfunction
 
-function mult_4x11;
+function  [7:0] mult_4x11;
 input [3:0] A;
 case (A)
   4'h0: mult_4x11=8'h00;
@@ -458,7 +458,7 @@ case (A)
 endcase
 endfunction
 
-function mult_4x13;
+function  [7:0] mult_4x13;
 input [3:0] A;
 case (A)
   4'h0: mult_4x13=8'h00;
@@ -480,7 +480,7 @@ case (A)
 endcase
 endfunction
 
-function mult_4x15;
+function [7:0] mult_4x15;
 input [3:0] A;
 case (A)
   4'h0: mult_4x15=8'h00;
@@ -513,7 +513,7 @@ case (A)
   6: tmp<=(mult_4x3(B))<<1;
   7: tmp<=mult_4x7(B);
   8: tmp<=({1'b0,1'b0,1'b0,1'b0,B[3:0]})<<3;
-  9: tmp<=mult_4x9(A);
+  9: tmp<=mult_4x9(B);
   10: tmp<=(mult_4x5(B))<<1;
   11: tmp<=mult_4x11(B);
   12: tmp<=(mult_4x3(B))<<2;
