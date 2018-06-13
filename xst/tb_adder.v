@@ -29,7 +29,7 @@ module tb_adder();
     a = 4'b0000; cin = 1'b1;
     b = 4'b0000; 
     #20
-    a = 4'b0111;
+    a = 4'b0111; cin = 1'b0;
     b = 4'b0001; //  1000
     #20
     a = 4'b1100;
@@ -47,7 +47,10 @@ module tb_adder();
     a = 4'b1111; cin = 0;
     b = 4'b0001;
     #20
-    $finish;
+    a = 4'b1110; cin = 1;
+    b = 4'b0001;
+    #20
+   $finish;
   end
  
 endmodule

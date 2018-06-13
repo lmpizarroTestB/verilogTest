@@ -8,7 +8,7 @@ module tb_adder16_cla();
   reg cin; 
   wire cout, p, g;
  
-  adder_16  DUT (
+  adder_16_cla  DUT (
     .Cin(cin),
     .A(a),
     .B(b),

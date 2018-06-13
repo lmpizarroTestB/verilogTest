@@ -181,8 +181,8 @@ reg c, s;
 
 always @(*)
 begin
-  c <= ((A&B) | ((A^B)&Cin));
-  s <= ((A^B)^Cin);
+  c <= A&B | (A^B)&Cin;
+  s <= A^B^Cin;
 end
 
 assign S = s;
@@ -193,13 +193,13 @@ assign Cout = c;
 endmodule
 
 module adder_4(Cin, A, B, S, Cout);
- input Cin; 
- input [3:0] A; 
- input [3:0] B;
+ input  Cin; 
+ input  [3:0] A; 
+ input  [3:0] B;
  output [3:0] S; 
  output Cout;
 
- wire c0, c1, c2, c3;
+ wire  c1, c2, c3;
 
  full_adder fa1(Cin, A[0], B[0], S[0], c1);
  full_adder fa2(c1, A[1], B[1], S[1], c2);
