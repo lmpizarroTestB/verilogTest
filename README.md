@@ -63,6 +63,11 @@
 
 [MIT 6004](https://6004.csail.mit.edu/)
 
+
+** Computer atithmetic
+[Zimmermann, Computer Arithmetic:](https://guest.iis.ee.ethz.ch/~zimmi/arith_lib.html)
+[Computer Arithmetic: Principles, Architectures, and VLSI Design](https://guest.iis.ee.ethz.ch/~zimmi/publications/comp_arith_notes.pdf)
+
 ** verilog reference guide xilinx pdf
 
 ** microcontroller fpga pdf
