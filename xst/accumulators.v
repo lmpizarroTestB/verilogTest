@@ -339,3 +339,190 @@ adder_4_la a44 (.Cin(c[2]), .A(A[15:12]), .B(B[15:12]), .S(S[15:12]), .Cout(Co),
 assign Cout = c[3];
 
 endmodule
+
+module multiplier_4(A,B,C);
+input [3:0] A;
+input [3:0] B;
+output [7:0] C;
+
+reg [7:0] tmp;
+
+function mult_4x3;
+input [3:0] A;
+
+case (A)
+  4'h0: mult_4x3=8'h00;
+  4'h1: mult_4x3=8'h03;
+  4'h2: mult_4x3=8'h06;
+  4'h3: mult_4x3=8'h09;
+  4'h4: mult_4x3=8'h0C;
+  4'h5: mult_4x3=8'hFF;
+  4'h6: mult_4x3=8'h12;
+  4'h7: mult_4x3=8'h15;
+  4'h8: mult_4x3=8'h18;
+  4'h9: mult_4x3=8'h1B;
+  4'hA: mult_4x3=8'h1E;
+  4'hB: mult_4x3=8'h21;
+  4'hC: mult_4x3=8'h24;
+  4'hD: mult_4x3=8'h27;
+  4'hE: mult_4x3=8'h2A;
+  4'hF: mult_4x3=8'h2D;
+endcase
+endfunction
+
+function mult_4x5;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x5=8'h00;
+  4'h1: mult_4x5=8'h05;
+  4'h2: mult_4x5=8'h0A;
+  4'h3: mult_4x5=8'hFF;
+  4'h4: mult_4x5=8'h0C;
+  4'h5: mult_4x5=8'h14;
+  4'h6: mult_4x5=8'h1E;
+  4'h7: mult_4x5=8'h23;
+  4'h8: mult_4x5=8'h28;
+  4'h9: mult_4x5=8'h2D;
+  4'hA: mult_4x5=8'h32;
+  4'hB: mult_4x5=8'h37;
+  4'hC: mult_4x5=8'h3C;
+  4'hD: mult_4x5=8'h41;
+  4'hE: mult_4x5=8'h46;
+  4'hF: mult_4x5=8'h4B;
+endcase
+endfunction
+
+function mult_4x7;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x7=8'h00;
+  4'h1: mult_4x7=8'h07;
+  4'h2: mult_4x7=8'h0E;
+  4'h3: mult_4x7=8'h15;
+  4'h4: mult_4x7=8'h1C;
+  4'h5: mult_4x7=8'h23;
+  4'h6: mult_4x7=8'h2A;
+  4'h7: mult_4x7=8'h31;
+  4'h8: mult_4x7=8'h38;
+  4'h9: mult_4x7=8'h3F;
+  4'hA: mult_4x7=8'h46;
+  4'hB: mult_4x7=8'h4D;
+  4'hC: mult_4x7=8'h54;
+  4'hD: mult_4x7=8'h5B;
+  4'hE: mult_4x7=8'h62;
+  4'hF: mult_4x7=8'h69;
+endcase
+endfunction
+
+function mult_4x9;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x9=8'h00;
+  4'h1: mult_4x9=8'h09;
+  4'h2: mult_4x9=8'h12;
+  4'h3: mult_4x9=8'h1B;
+  4'h4: mult_4x9=8'h24;
+  4'h5: mult_4x9=8'h2D;
+  4'h6: mult_4x9=8'h36;
+  4'h7: mult_4x9=8'h3F;
+  4'h8: mult_4x9=8'h48;
+  4'h9: mult_4x9=8'h51;
+  4'hA: mult_4x9=8'h5A;
+  4'hB: mult_4x9=8'h63;
+  4'hC: mult_4x9=8'h6C;
+  4'hD: mult_4x9=8'h75;
+  4'hE: mult_4x9=8'h7E;
+  4'hF: mult_4x9=8'h87;
+endcase
+endfunction
+
+function mult_4x11;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x11=8'h00;
+  4'h1: mult_4x11=8'h0B;
+  4'h2: mult_4x11=8'h16;
+  4'h3: mult_4x11=8'h21;
+  4'h4: mult_4x11=8'h2C;
+  4'h5: mult_4x11=8'h37;
+  4'h6: mult_4x11=8'h42;
+  4'h7: mult_4x11=8'h4D;
+  4'h8: mult_4x11=8'h58;
+  4'h9: mult_4x11=8'h63;
+  4'hA: mult_4x11=8'h6E;
+  4'hB: mult_4x11=8'h79;
+  4'hC: mult_4x11=8'h84;
+  4'hD: mult_4x11=8'h8F;
+  4'hE: mult_4x11=8'h9A;
+  4'hF: mult_4x11=8'hA5;
+endcase
+endfunction
+
+function mult_4x13;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x13=8'h00;
+  4'h1: mult_4x13=8'h0D;
+  4'h2: mult_4x13=8'h1A;
+  4'h3: mult_4x13=8'h27;
+  4'h4: mult_4x13=8'h34;
+  4'h5: mult_4x13=8'h41;
+  4'h6: mult_4x13=8'h4E;
+  4'h7: mult_4x13=8'h5B;
+  4'h8: mult_4x13=8'h68;
+  4'h9: mult_4x13=8'h75;
+  4'hA: mult_4x13=8'h82;
+  4'hB: mult_4x13=8'h8F;
+  4'hC: mult_4x13=8'h9C;
+  4'hD: mult_4x13=8'hA9;
+  4'hE: mult_4x13=8'hB6;
+  4'hF: mult_4x13=8'hC3;
+endcase
+endfunction
+
+function mult_4x15;
+input [3:0] A;
+case (A)
+  4'h0: mult_4x15=8'h00;
+  4'h1: mult_4x15=8'h0F;
+  4'h2: mult_4x15=8'h1E;
+  4'h3: mult_4x15=8'h2D;
+  4'h4: mult_4x15=8'h3C;
+  4'h5: mult_4x15=8'h4B;
+  4'h6: mult_4x15=8'h5A;
+  4'h7: mult_4x15=8'h69;
+  4'h8: mult_4x15=8'h78;
+  4'h9: mult_4x15=8'h87;
+  4'hA: mult_4x15=8'h96;
+  4'hB: mult_4x15=8'hA5;
+  4'hC: mult_4x15=8'hB4;
+  4'hD: mult_4x15=8'hC3;
+  4'hE: mult_4x15=8'hD2;
+  4'hF: mult_4x15=8'hE1;
+endcase
+endfunction
+
+always @(A)
+case (A)
+  0: tmp<=0;
+  1: tmp<=({1'b0,1'b0,1'b0,1'b0,B[3:0]});
+  2: tmp<=({1'b0,1'b0,1'b0,1'b0,B[3:0]})<<1;
+  3: tmp<=mult_4x3(B);
+  4: tmp<=({1'b0,1'b0,1'b0,1'b0,B[3:0]})<<2;
+  5: tmp<=mult_4x5(B);
+  6: tmp<=(mult_4x3(B))<<1;
+  7: tmp<=mult_4x7(B);
+  8: tmp<=({1'b0,1'b0,1'b0,1'b0,B[3:0]})<<3;
+  9: tmp<=mult_4x9(A);
+  10: tmp<=(mult_4x5(B))<<1;
+  11: tmp<=mult_4x11(B);
+  12: tmp<=(mult_4x3(B))<<2;
+  13: tmp<=(mult_4x13(B));
+  14: tmp<=mult_4x7(B)<<1;
+  15: tmp<=(mult_4x15(B));
+endcase
+
+assign C = tmp;
+endmodule
+
+
