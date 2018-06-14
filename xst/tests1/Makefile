@@ -52,4 +52,4 @@ pwmN: tb_pwmN.v ../one_shot.v
 
 
 clean:
-	rm *.sim 
+	rm *.sim *.vcd

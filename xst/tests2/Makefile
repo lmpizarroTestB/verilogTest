@@ -28,6 +28,6 @@ $(N_COUNTER_8): $(D_COUNTER_8)
 	./$(N_COUNTER_8).sim
 
 clean:
-	rm *.sim
+	rm *.sim *.vcd
 	
 

@@ -1,5 +1,3 @@
-//`include "accumulators.v"
-
 
 module mult4_bb(A,B,C);
 input [3:0] A;
