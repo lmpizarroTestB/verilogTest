@@ -68,6 +68,13 @@
 [Zimmermann, Computer Arithmetic:](https://guest.iis.ee.ethz.ch/~zimmi/arith_lib.html)
 [Computer Arithmetic: Principles, Architectures, and VLSI Design](https://guest.iis.ee.ethz.ch/~zimmi/publications/comp_arith_notes.pdf)
 
+
+[EAB embedded array block](http://www-micro.deis.unibo.it/~romani/Dida01/lezioni/flex_v2.pdf)
+
+[fpga lut 4bit multipler](https://www.doulos.com/knowhow/vhdl_designers_guide/tips/using_lut_architectures_in_fpgas/)
+
+[Implementing Logic with the Embedded Array](ftp://ftp.altera.com/pub/lit_req/document/pib/pib021.pdf)
+
 ** verilog reference guide xilinx pdf
 
 ** microcontroller fpga pdf
