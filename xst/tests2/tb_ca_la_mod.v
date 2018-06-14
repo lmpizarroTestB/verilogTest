@@ -1,4 +1,4 @@
-`include "accumulators.v"
+//`include "accumulators.v"
 
 
 module tb_ca_la_mod();
@@ -9,7 +9,7 @@ module tb_ca_la_mod();
   reg cin; 
   wire cout, p, g;
  
-  carry_la_mod   DUT (
+  carry_la_16   DUT (
     .Cin(cin),
     .P(a),
     .G(b),
