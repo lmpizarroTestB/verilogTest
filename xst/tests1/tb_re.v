@@ -1,5 +1,5 @@
-`include "counters.v"
-`include "uart.v"
+//`include "counters.v"
+//`include "uart.v"
 `timescale 1ns/1ps
 
 

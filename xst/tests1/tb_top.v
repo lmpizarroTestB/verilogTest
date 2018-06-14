@@ -1,4 +1,4 @@
-`include "counters.v"
+//`include "counters.v"
 `timescale 1ns/1ps
 
 module tb_counter20();

@@ -1,4 +1,4 @@
-`include "accumulators.v"
+//`include "accumulators.v"
 
 
 module tb_full_adder();

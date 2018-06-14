@@ -1,5 +1,5 @@
-`include "counters.v"
-`include "three_st.v"
+//`include "counters.v"
+//`include "three_st.v"
 `timescale 1ns/1ps
 
 
