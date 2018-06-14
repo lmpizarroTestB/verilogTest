@@ -1,4 +1,4 @@
-`include "../accumulators.v"
+//`include "../multipliers.v"
 
 module mult (B,C);
 input [3:0] B;
@@ -31,7 +31,7 @@ endfunction
 assign C = mult_4x3(B);
 endmodule
 
-module tb_multiplier4();
+module tb_mult4_bb();
  
   reg [3:0] a, b;
   wire [7:0] out;
@@ -42,7 +42,7 @@ module tb_multiplier4();
 
   integer i,j;
  
-  multiplier_4  DUT (
+  mult4_bb  DUT (
     .A(a),
     .B(b),
     .C(out)
@@ -53,7 +53,6 @@ module tb_multiplier4();
     $monitor ("time %g   A %d   B %d   C %d  ",$time, a, b, out);
     $dumpvars(0, DUT);
     #20
-    /*    
     a = 0; cin = 1'b1; b = 4'b0000; 
     #20
     a = 1; cin = 1'b0; b = 4'b0001; //  1000
@@ -87,7 +86,6 @@ module tb_multiplier4();
     a = 15; cin = 1; b = 4'b0001;
     #20
     b = 4'b0010;
-    */
     a=0;
     b=0;
     for (i = 0; i < 16; i = i + 1)
@@ -116,26 +114,6 @@ module tb_multiplier4();
     #20 b=8; a=0;
     for (i = 0; i < 16; i = i + 1)
         #20 a = i; cin = 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    $finish;
   end
  

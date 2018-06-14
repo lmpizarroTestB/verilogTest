@@ -283,6 +283,21 @@ assign Cout = C[3];
 endmodule
 
 
+module adder_8_la(Cin, A, B, S, Cout);
+input Cin;
+output Cout;
+
+input [7:0] A;
+input [7:0] B;
+output [7:0] S;
+
+wire Ct;
+
+adder_4_la adder1(.Cin(Cin), .A(A[3:0]), .B(B[3:0]), .S(S[3:0]), .Cout(Ct), .p(), .g());
+adder_4_la adder2(.Cin(Ct), .A(A[7:4]), .B(B[7:4]), .S(S[7:4]), .Cout(Cout), .p(), .g());
+
+endmodule
+
 /*
 ---------------------------------------
 ---------------------------------------
@@ -523,6 +538,19 @@ case (A)
 endcase
 
 assign C = tmp;
+endmodule
+
+module barrel_shift_4(X, Y);
+input [3:0] X;
+output reg [3:0] Y;
+
+always @(X)
+case (X)
+ 1:Y<={X[2:0],X[3]};
+ 2:Y<={X[1:0],X[3:2]};
+ 3:Y<={X[0],X[3:1]};
+ 0:Y<=X[3:0];
+endcase
 endmodule
 
 
