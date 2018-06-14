@@ -553,4 +553,31 @@ case (X)
 endcase
 endmodule
 
+module adder2_b(Cin, A, B, S,Cout);
+input Cin;
+input [1:0] A;
+input [1:0] B;
+output  [2:0] S;
+output  Cout;
+reg [3*8:0] tmp;
+localparam [3*8:0] tmp0  = {4'd0,4'd1,4'd2,4'd3,4'd4,4'd5,4'd6,4'd7};
+localparam [3*8:0] tmp1  = {4'd1,4'd2,4'd3,4'd4,4'd5,4'd6,4'd7,4'd8};
+localparam [3*8:0] tmp2  = {4'd2,4'd3,4'd4,4'd5,4'd6,4'd7,4'd8, 4'd9};
+localparam [3*8:0] tmp3  = {4'd3,4'd4,4'd5,4'd6,4'd7,4'd8,4'd9, 4'd10};
+wire [3:0] s;
 
+assign a = {A[1:0], Cin};
+assign s = tmp[a];
+assign S = s[2:0];
+assign Cout = s[3];
+
+always @(*)
+case(A)
+  0:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp0;
+  1:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp1;
+  2:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp2;
+  3:tmp[3*8:0]=tmp3;
+endcase
+
+
+endmodule
