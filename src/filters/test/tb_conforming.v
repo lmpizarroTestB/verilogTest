@@ -22,9 +22,9 @@ module tb_conforming();
     #20 x=13'd0; clr=0;
     #20 x=13'd0; clr=0;
     #20 x=13'd0; clr=0;
-    #20 x= 1250; oe=1;
-    for (i=0; i<10; i=i+1)
-      #20 x= 0/1.1;
+    #10 x= 6250; oe=1;
+    for (i=0; i<130; i=i+1)
+      #10 x= x/1.2;
     
     $finish;
   end

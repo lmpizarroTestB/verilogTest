@@ -12,3 +12,4 @@ simu
 *.blif
 *.ps
 *.vhd
+*.sim
