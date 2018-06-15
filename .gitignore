@@ -10,3 +10,5 @@ simu
 *.swp
 *.bin
 *.blif
+*.ps
+*.vhd

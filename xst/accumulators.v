@@ -19,16 +19,16 @@ module accum (C, CLR, D, Q);
  input C, CLR;
  input [3:0] D;
  output [3:0] Q;
- reg [3:0] tmp;
+ reg [3:0] tmp=4'b0000;
 
  always @(posedge C or posedge CLR)
   begin
-   if (CLR)
-    tmp = 4'b0000;
+   if (CLR==1)
+    tmp[3:0] = 4'b0000;
    else
-    tmp = tmp + D;
+    tmp[3:0] = (tmp[3:0]+D[3:0]);
   end
- assign Q = tmp;
+ assign Q[3:0] = tmp[3:0];
 endmodule
 
 /*

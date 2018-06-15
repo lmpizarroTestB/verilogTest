@@ -8,6 +8,10 @@ N_COUNTER10 = counter10
 D_COUNTER_8 = ./tb_counter_8.v ../counters.v
 N_COUNTER_8 = counter_8
 
+D_ACCUM = ./tb_accum.v  ../accumulators.v 
+N_ACCUM = accum
+
+
 
 all: basic_and ca_la_mod $(N_COUNTER10) $(N_COUNTER_8)
 
@@ -26,6 +30,12 @@ $(N_COUNTER10): $(D_COUNTER10)
 $(N_COUNTER_8): $(D_COUNTER_8) 
 	iverilog -o $(N_COUNTER_8).sim $(D_COUNTER_8)
 	./$(N_COUNTER_8).sim
+
+$(N_ACCUM): $(D_ACCUM) 
+	iverilog -o $(N_ACCUM).sim $(D_ACCUM)
+	./$(N_ACCUM).sim
+
+
 
 clean:
 	rm *.sim *.vcd

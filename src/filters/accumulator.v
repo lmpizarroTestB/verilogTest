@@ -1,17 +1,23 @@
 module accumulator #(parameter Nbits = 14)
-  (x1, y, clk, clr);
+             (X, Y, CLK, CLR);
 
-  input wire clk;
-  input wire clr;
+  input CLK;
+  input CLR;
 
-  input wire signed [Nbits-1:0] x1;
+  input  [Nbits-1:0] X;
+  output [Nbits-1:0] Y;
+  reg [Nbits-1:0] accum=0; 
 
-  output signed [Nbits-1:0] y;
+  //reg Y;
 
-  wire signed [Nbits-1:0] accum; 
+  always @(posedge CLK or posedge CLR)
+  begin
+     if (CLR)
+      accum[Nbits-1:0] <= 0;
+     else
+       accum[Nbits-1:0] <= accum[Nbits-1:0] + X[Nbits-1:0];
+  end
 
-  assign accum = accum + x1;
-
-  assign y = accum;
+  assign Y = accum;
 
 endmodule
