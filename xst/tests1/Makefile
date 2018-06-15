@@ -1,4 +1,8 @@
-all: adder_8 mult4_bb adder adder16 full_adder te top SRS rx re pwm pwmN
+all: adder_8 mult4_bb adder adder16 full_adder te top SRS rx re pwm pwmN adder2_bb
+
+D_ADDER2_BB = ./tb_adder2_bb.v ../accumulators.v
+N_ADDER2_BB = adder2_bb
+
 
 adder_8: tb_adder_8.v ../accumulators.v
 	iverilog -o adder_8.sim tb_adder_8.v ../accumulators.v 
@@ -50,6 +54,9 @@ pwmN: tb_pwmN.v ../one_shot.v
 	iverilog -o pwmN.sim tb_pwmN.v ../one_shot.v
 	./pwmN.sim
 
+$(N_ADDER2_BB): $(D_ADDER2_BB)
+	iverilog -o $(N_ADDER2_BB).sim $(D_ADDER2_BB)
+	./$(N_ADDER2_BB).sim
 
 clean:
 	rm *.sim *.vcd

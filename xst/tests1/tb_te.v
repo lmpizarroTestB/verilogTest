@@ -98,7 +98,7 @@ parameter SIZE = 3;
 reg   [SIZE-1:0] state;// Seq part of the FSM
 reg   [SIZE-1:0] next_state;// combo part of FSM
 
-reg enable_shif_register;
+//reg enable_shif_register;
 
 reg cen, ready = 1'b0;
 reg int_reset = 1'b0;

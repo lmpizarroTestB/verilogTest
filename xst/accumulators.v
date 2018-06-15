@@ -552,32 +552,73 @@ case (X)
  0:Y<=X[3:0];
 endcase
 endmodule
-
+//
+//
 module adder2_b(Cin, A, B, S,Cout);
 input Cin;
 input [1:0] A;
 input [1:0] B;
-output  [2:0] S;
+output  [1:0] S;
 output  Cout;
-reg [3*8:0] tmp;
-localparam [3*8:0] tmp0  = {4'd0,4'd1,4'd2,4'd3,4'd4,4'd5,4'd6,4'd7};
-localparam [3*8:0] tmp1  = {4'd1,4'd2,4'd3,4'd4,4'd5,4'd6,4'd7,4'd8};
-localparam [3*8:0] tmp2  = {4'd2,4'd3,4'd4,4'd5,4'd6,4'd7,4'd8, 4'd9};
-localparam [3*8:0] tmp3  = {4'd3,4'd4,4'd5,4'd6,4'd7,4'd8,4'd9, 4'd10};
-wire [3:0] s;
+reg [3:0] s;
+wire [2:0] a;
+assign a[2:0] = {A[1:0], Cin};
 
-assign a = {A[1:0], Cin};
-assign s = tmp[a];
-assign S = s[2:0];
-assign Cout = s[3];
-
-always @(*)
-case(A)
-  0:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp0;
-  1:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp1;
-  2:{tmp[0],tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7] }=tmp2;
-  3:tmp[3*8:0]=tmp3;
+always @(A,B,Cin)
+case(B)
+  0:
+     begin
+	     case ({A[1:0], Cin})
+		  0:s=3'd0;
+		  1:s=3'd1;
+		  2:s=3'd1;
+		  3:s=3'd2;
+		  4:s=3'd2;
+		  5:s=3'd3;
+		  6:s=3'd3;
+		  7:s=3'd4;
+	     endcase
+     end 
+  1:
+    begin
+	 case({A[1:0], Cin})
+		  0:s=3'd1;
+		  1:s=3'd2;
+		  2:s=3'd2;
+		  3:s=3'd3;
+		  4:s=3'd3;
+		  5:s=3'd4;
+		  6:s=3'd4;
+		  7:s=3'd5;
+	 endcase
+    end
+  2:
+    begin
+	 case(a)
+		  0:s=3'd2;
+		  1:s=3'd3;
+		  2:s=3'd3;
+		  3:s=3'd4;
+		  4:s=3'd4;
+		  5:s=3'd5;
+		  6:s=3'd5;
+		  7:s=3'd6;
+	 endcase
+    end
+  3:
+    begin
+	 case(a)
+		  0:s=3'd3;
+		  1:s=3'd4;
+		  2:s=3'd4;
+		  3:s=3'd5;
+		  4:s=3'd5;
+		  5:s=3'd6;
+		  6:s=3'd6;
+		  7:s=3'd7;
+	 endcase
+    end
 endcase
-
-
+assign S[1:0] = s[1:0];
+assign Cout = s[2];
 endmodule
