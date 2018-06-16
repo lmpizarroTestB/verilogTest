@@ -7,7 +7,8 @@ module accumulator #(parameter Nbits = 14)
 
   input  signed [Nbits-1:0] X;
   output signed  [Nbits-1:0] Y;
-  reg signed [Nbits-1:0] accum=0; 
+  reg signed [Nbits-1:0] accum=0;
+
 
   //reg Y;
 
@@ -19,6 +20,6 @@ module accumulator #(parameter Nbits = 14)
        accum[Nbits-1:0] <= accum[Nbits-1:0] + (X[Nbits-1:0]);
   end
 
-  assign Y = OE?accum:z;
+  assign Y = accum;
 
 endmodule
