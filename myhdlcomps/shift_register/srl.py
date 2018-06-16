@@ -144,36 +144,6 @@ def comparator(A,B,gt, eq, lt):
 
   return proc
 
-@block
-def discriminator (sig, data, wll, wul, out, sig_out, Nbits):
-
-    upper_level = Signal(intbv(0)[Nbits:])
-    lower_level = Signal(intbv(0)[Nbits:])
-
-    @always (sig)
-    def disc():
-        if sig > lower_level and sig < upper_level:
-            out.next = 1
-            sig_out.next = sig
-        else:
-            out.next = 0
-            sig_out.next = 0
-
-    @always (wll.posedge, wul.posedge)
-    def setul():
-        if wll:
-            if data <= lower_level:
-              upper_level.next = lower_level + 1
-            else:
-              upper_level.next = data
-        elif wul:
-            if data >= upper_level:
-                lower_level.next = upper_level # - 1
-            else:
-                lower_level.next = data
-
-
-    return disc, setul
 
 @block
 def attenuator(sig, att, sig_out):

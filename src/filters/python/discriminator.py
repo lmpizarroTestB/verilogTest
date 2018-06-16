@@ -1,10 +1,64 @@
 from myhdl import always, instance, Signal, \
     ResetSignal, modbv, delay, StopSimulation, \
-    intbv, Simulation, instances
+    intbv, Simulation, instances, block
 
-from srl import discriminator
-import genSignal
-from genSignal import *
+
+def genSig_discriminator():
+  #        sig data wll wul 
+  sig =  [0]*12 + [20]*3 + [70]*3 + [110]*3 + [0]*3
+  data = [0]*3 + [100]*3 + [0]*3  + [50]*3 + [0]*12
+  wul = [0]*3 + [1]*3 + [0]*3  +   [0]*3 + [0]*12
+  wll = [0]*3 + [0]*3 + [0]*3  +   [1]*3 + [0]*12
+
+  sig_discriminator = [[0,0,0,0],   [0,0,0,0],   [0,0,0,0], \
+                       [0,100,0,1], [0,100,0,1], [0,100,0,1], \
+                       [0,0,0,0], [0,0,0,0], [0,0,0,0],
+                       [0,50,1,0], [0,50,1,0], [0,50,1,0],
+                       [20,0,0,0], [20,0,0,0], [20,0,0,0],
+                       [70,0,0,0], [70,0,0,0], [70,0,0,0],
+                       [110,0,0,0], [110,0,0,0], [110,0,0,0],
+                       [0,0,0,0], [0,0,0,0], [0,0,0,0],
+                      ]
+  d=[]
+  for i,e in enumerate(sig):
+      d.append([e, data[i], wll[i], wul[i]])
+  #print d
+  #return sig_discriminator
+  return d
+
+
+@block
+def discriminator (sig, data, wll, wul, out, sig_out, Nbits):
+
+    upper_level = Signal(intbv(0)[Nbits:])
+    lower_level = Signal(intbv(0)[Nbits:])
+
+    @always (sig)
+    def disc():
+        if sig > lower_level and sig < upper_level:
+            out.next = 1
+            sig_out.next = sig
+        else:
+            out.next = 0
+            sig_out.next = 0
+
+    @always (wll.posedge, wul.posedge)
+    def setul():
+        if wll:
+            if data <= lower_level:
+              upper_level.next = lower_level + 1
+            else:
+              upper_level.next = data
+        elif wul:
+            if data >= upper_level:
+                lower_level.next = upper_level # - 1
+            else:
+                lower_level.next = data
+
+
+    return disc, setul
+
+
 
 class Discriminator():
 
