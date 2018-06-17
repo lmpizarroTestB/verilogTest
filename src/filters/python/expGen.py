@@ -42,22 +42,57 @@ end
 endmodule
 '''
 
-import math
 import biggles
 import subprocess
+import numpy as np
+
+class nucSignal:
+
+  def __init__(self, fs=100E6, tau=1E-6, Nsamples=15000):
+    self.TS = 1/fs
+    self.fs = fs
+    self.tau = tau
+    self.Nsamples =Nsamples
+
+  def expSignal(self,amp=50):
+    self.tsi = np.linspace(0,self.TS*self.Nsamples, self.Nsamples)
+    self.signal1 = amp*np.exp(-self.tsi/self.tau)
+    self.tsimicro = self.tsi*1E6
 
 
-def expSignal(amp=1024, tau=100, size=4096,TS=1E-8):
-  signal =[]
-  t =[]
-  for i in range(size):
-    ti = TS*i
-    data = int(amp*math.exp(-ti/tau))
-    t.append(ti)
-    signal.append(data)
+  def display(self):
+    p = biggles.FramedPlot()
+    p.add( biggles.Curve(self.tsimicro,self.signal1, color="red") )
+    p.add( biggles.Curve(self.tsimicro,self.sigPre, color="red") )
+    p.show()
 
-  return t,signal
+  def genPre(self, amp=50):
 
+    self.expSignal(amp=amp)
+
+    self.sigPre=[]
+    y1=0
+    for i,e in enumerate(self.signal1):
+        yy =e+ 0.9999*y1 
+        self.sigPre.append(yy)
+        y1=yy
+
+    self.sigPre=np.asarray(self.sigPre)    
+
+
+
+
+def delayS(s, t, TS, N=10):
+    d=np.copy(s)
+    size = d.shape[0] + N
+
+    TT = np.linspace(0,TS*(size), (size))
+    d=np.pad(d,(N,0),'constant')
+    s=np.pad(s,(0,N),'constant')
+
+    print TT.shape, d.shape, s.shape
+
+    return TT, d,s
 
 def integrator75(x):
     
@@ -69,23 +104,6 @@ def integrator75(x):
         y1=yy
 
     return y
-
-def genPre():
-    fs=100E6
-    TS=1/fs
-    tau = .1E-6
-
-    t,x=expSignal(amp=500,tau=tau,TS=TS)
-
-    y=[]
-    y1=0
-    for i,e in enumerate(x):
-        yy =e+ 0.9999*y1 
-        y.append(yy)
-        y1=yy
-
-    return t,y
-
 
 def gen_signal_verilog(amp=1024, tau=.01, size=4096):
   signal =""
@@ -134,14 +152,20 @@ def main():
   p.write_img( 400, 400, "example2.png" )
  
 if __name__ == "__main__":
-    fs=100E6
-    TS=1/fs
-    tau = .1E-6
-    t,x=expSignal(amp=500,tau=tau,TS=TS)
-    t,s=genPre()
+
+
+    ns = nucSignal()
+    ns.expSignal()
+    ns.genPre(amp=5)
+    ns.display()
+
+
+    t,x,s=delayS(ns.sigPre,ns.tsimicro, ns.TS, N=1000)
+
+
     p = biggles.FramedPlot()
     p.add( biggles.Curve(t,s, color="blue") )
-    #p.add( biggles.Curve(t,x, color="red") )
+    p.add( biggles.Curve(t,x, color="red") )
     p.show()
 
 
