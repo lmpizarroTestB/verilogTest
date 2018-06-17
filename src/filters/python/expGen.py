@@ -46,22 +46,64 @@ import math
 import biggles
 import subprocess
 
-def gen_signal(amp=1024, tau=.01, size=4096):
-  signal =""
+
+def expSignal(amp=1024, tau=100, size=4096,TS=1E-8):
+  signal =[]
+  t =[]
   for i in range(size):
-    data = amp*math.exp(-i*tau)
+    ti = TS*i
+    data = int(amp*math.exp(-ti/tau))
+    t.append(ti)
+    signal.append(data)
+
+  return t,signal
+
+
+def integrator75(x):
+    
+    y=[]
+    y1=0
+    for e in x:
+        yy =int(e+ int((y1 + int(y1/2.0))/2.0))
+        y.append(yy)
+        y1=yy
+
+    return y
+
+def genPre():
+    fs=100E6
+    TS=1/fs
+    tau = .1E-6
+
+    t,x=expSignal(amp=500,tau=tau,TS=TS)
+
+    y=[]
+    y1=0
+    for i,e in enumerate(x):
+        yy =e+ 0.9999*y1 
+        y.append(yy)
+        y1=yy
+
+    return t,y
+
+
+def gen_signal_verilog(amp=1024, tau=.01, size=4096):
+  signal =""
+  s= expSignal(amp, tau,size)
+  for i in range(size):
+    data = s[i] 
     signal = signal +  "   #5 data =" + str(int(data)) + ";\n"
 
   return signal[:-1]
 
 def main():
 
-  tb_gen=header % "shapeInt.v"
+  tb_gen=header % "../shapeInt.v"
   tb_gen = tb_gen+modulev
   tb_file_name="tb_shapeIntTest.v"
 
   
-  tb_gen = tb_gen + gen_signal() + footer
+  tb_gen = tb_gen + gen_signal_verilog() + footer
 
   fo=open(tb_file_name, 'w')
   fo.write(tb_gen)
@@ -92,4 +134,14 @@ def main():
   p.write_img( 400, 400, "example2.png" )
  
 if __name__ == "__main__":
-  main()
+    fs=100E6
+    TS=1/fs
+    tau = .1E-6
+    t,x=expSignal(amp=500,tau=tau,TS=TS)
+    t,s=genPre()
+    p = biggles.FramedPlot()
+    p.add( biggles.Curve(t,s, color="blue") )
+    #p.add( biggles.Curve(t,x, color="red") )
+    p.show()
+
+
