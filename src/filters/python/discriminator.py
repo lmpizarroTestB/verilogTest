@@ -118,6 +118,8 @@ class Discriminator():
       self.clk.next = not self.clk
 
     return clockGen, monitor, self.dut, stimulus
+
+
 import biggles
 
 def main():
