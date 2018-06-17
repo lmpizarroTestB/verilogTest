@@ -21,12 +21,15 @@ always @(posedge CLK or posedge CLR or X)
       begin
       yy[Nbits-1:0] <= 0;
       Y1<=0;
+      Y2<=0;
+      Y3<=0;
+      Y4<=0;
+      X1<=0;
       end
      else
        begin
        if (CLK) begin
-       //yy[Nbits-1:0] <= $signed((X + X1 + X2 + X3 + X4)>>2);
-       yy=$signed(X-X1 + ((Y1+Y1>>>1)>>>1) + Y2>>>4 + Y3>>>4+Y4>>>4);
+       yy=$signed((X-X1)+ (((Y1+(Y1>>>1))>>>1) + (Y2>>>3))+ ((Y3>>>4)+(Y4>>>4)) );
 
        X1 = X;
        Y4 = Y3;

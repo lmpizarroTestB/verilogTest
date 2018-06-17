@@ -46,15 +46,25 @@ def PBO2(rel=0.01):
   b, a = signal.butter(2, rel, 'lowpass', analog=False)
   return {"a0" : a0, "a1" : a1, "a2":a2, 'b0':1, 'b1':b1, 'b2':b2}
 
-def PBO2_S(rel=0.01):
+def PBO2_S(rel=0.05):
   b, a = signal.butter(2, rel, 'lowpass', analog=False)
   return {"a0" : b[0], "a1" : b[1], "a2":b[2], 'b0':a[0], 'b1':a[1], 'b2':a[2]}
+
+def PBO1_S(rel=0.01):
+  b, a = signal.butter(1, rel, 'lowpass', analog=False)
+  return {"a0" : b[0], "a1" : b[1], "a2":0.0, 'b0':a[0], 'b1':a[1], 'b2':0.0}
+
+def HPO1_S(rel=0.01):
+  b, a = signal.butter(1, rel, 'highpass', analog=False)
+  return {"a0" : b[0], "a1" : b[1], "a2":0.0, 'b0':a[0], 'b1':a[1], 'b2':0.0}
+
+
 
 def HPO2_S(rel=0.01):
   b, a = signal.butter(2, rel, 'highpass', analog=False)
   return {"a0" : b[0], "a1" : b[1], "a2":b[2], 'b0':a[0], 'b1':a[1], 'b2':a[2]}
 
-def BPO2_S(low=0.01, high=0.02):
+def BPO2_S(low=0.01, high=0.1):
   b, a = signal.butter(2, [low,high], 'band', analog=False)
   return {"a0" : b[0], "a1" : b[1], "a2":b[2], 'b0':a[0], 'b1':a[1], 'b2':a[2]}
 
@@ -63,7 +73,7 @@ def BPO2_S(low=0.01, high=0.02):
 http://scipy-cookbook.readthedocs.io/items/ButterworthBandpass.html
 '''
 
-def HPO2 (rel=0.01):
+def HPO2 (rel=0.1):
   K = np.tan( np.pi * rel )
   coef = PBO2(rel)
   coef['b0'] = 1 
@@ -128,8 +138,8 @@ def response (coef, x):
   x0=1.0
 
   for e in x:
-      x0 = e
-      y0= (a0 * x0 + a1 * x1 + a2 * x2 - b1 * y1 - b2 * y2) / b0
+      x0 = (e)
+      y0= ((a0 * x0 + a1 * x1 + a2 * x2 - b1 * y1 - b2 * y2) / b0)
       response.append(y0)
       x2=x1
       x1=x0
@@ -137,9 +147,10 @@ def response (coef, x):
       y1=y0
   return response
 
-def signal(N=300, tipo='imp', exp_=.5):
+def signalGen(Nzeros=40,N=300, tipo='imp', exp_=.5):
 
     x=[0]*N
+    t = [i for i in range(N+Nzeros)]
     x[0] = 1
     if tipo == 'step':
       x=[1]*N
@@ -148,22 +159,29 @@ def signal(N=300, tipo='imp', exp_=.5):
       if tipo == 'exp':
         for i,e in enumerate(x):
             x[i] = np.exp(-i*exp_)
-    return x
+    [x.insert(0,0) for i in range(Nzeros)]
+    return t,x
 
 def main ():
   coefI = integrador()
   coefD = derivador1()
-  coefPB = pass_bass()
-  x = signal(tipo='step')
-  print x
-  r = response(coefPB, x)
-  rr = response(coefI, r)
-  r = response(coefI, rr)
-  rr = response(coefI, r)
+  coefHP = HPO2_S(rel=0.01)
+  coefPB = PBO1_S()
+  print coefHP
+  print coefPB
+  t,x = signalGen(tipo='step')
+  r = response(coefHP, x)
+  rr = response(coefPB, x)
 
-  import matplotlib.pyplot as plt
-  plt.plot(rr)
-  plt.plot(x)
+  #r = response(coefI, rr)
+  #rr = response(coefI, r)
+
+  import biggles
+  plt = biggles.FramedPlot()
+
+  plt.add(biggles.Curve( t,x, color="black"))
+  plt.add(biggles.Curve( t,rr, color="red"))
+  plt.add(biggles.Curve( t,r, color="blue"))
   plt.show()
 
 if __name__ == "__main__":
