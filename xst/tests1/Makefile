@@ -1,4 +1,4 @@
-all: adder_8 mult4_bb adder adder16 full_adder te top SRS rx re pwm pwmN adder2_bb adder4_bb
+all: adder_8 mult4_bb adder adder16 full_adder te top SRS rx re pwm pwmN adder2_bb adder4_bb addS accumS
 
 D_ADDER2_BB = ./tb_adder2_bb.v ../accumulators.v
 N_ADDER2_BB = adder2_bb
@@ -6,6 +6,11 @@ N_ADDER2_BB = adder2_bb
 D_ADDER4_BB = ./tb_adder4_bb.v ../accumulators.v
 N_ADDER4_BB = adder4_bb
 
+D_ADDS = ./tb_addS.v ../mathFilters.v
+N_ADDS = addS
+
+D_ACCUMS = ./tb_accumS.v ../mathFilters.v
+N_ACCUMS = accumS
 
 
 adder_8: tb_adder_8.v ../accumulators.v
@@ -65,6 +70,15 @@ $(N_ADDER2_BB): $(D_ADDER2_BB)
 $(N_ADDER4_BB): $(D_ADDER4_BB)
 	iverilog -o $(N_ADDER4_BB).sim $(D_ADDER4_BB)
 	./$(N_ADDER4_BB).sim
+
+$(N_ADDS): $(D_ADDS)
+	iverilog -o $(N_ADDS).sim $(D_ADDS)
+	./$(N_ADDS).sim
+
+$(N_ACCUMS): $(D_ACCUMS)
+	iverilog -o $(N_ACCUMS).sim $(D_ACCUMS)
+	./$(N_ACCUMS).sim
+
 
 
 clean:

@@ -259,3 +259,57 @@ def adder(Cin, A,B, S, Cout):
       full_adder(Cin, A[0], B[0], S[0], C1)
       full_adder(C1, A[1], B[1], S[1], Cout)
    return calcs 
+
+
+@block
+def dff(q, d, clk):
+   @always(clk.posedge)
+   def logic():
+     q.next = d
+
+   return logic
+
+
+@block
+def register(q, d, clk):
+   ff0 = dff(q[0], d[0], clk)
+   ff1 = dff(q[1], d[1], clk)
+   ff2 = dff(q[2], d[2], clk)
+   ff3 = dff(q[3], d[3], clk)
+   ff4 = dff(q[4], d[4], clk)
+   ff5 = dff(q[5], d[5], clk)
+   ff6 = dff(q[6], d[6], clk)
+   ff7 = dff(q[7], d[7], clk)
+
+   @always(clk.posedge)
+   def seq():
+       q[0].next = d[0]
+       q[1].next = d[1]
+       q[2].next = d[2]
+       q[3].next = d[3]
+       q[4].next = d[4]
+       q[5].next = d[5]
+       q[6].next = d[6]
+       q[7].next = d[7]
+   return seq
+
+@block
+def addSat (A, B, C, Nbits=16):
+  maxNeg = -2**(Nbits-1)
+  maxPos = 2**(Nbits-1) - 1
+
+
+  tmp =Signal(intbv(0)[Nbits+1:])
+
+  @always(A,B)
+  def comb():
+   tmp.next = A + B
+
+   if tmp<maxNeg: 
+       tmp.next=maxNeg
+   if tmp>maxPos:
+       tmp.next=maxPos
+   C.next = tmp[Nbits:0]
+
+  return comb
+

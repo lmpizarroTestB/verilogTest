@@ -160,6 +160,23 @@ def convert_adder(hdl):
     dut = adder(Cin, A, B, S, Cout)
     dut.convert(hdl=hdl, name="adder")
 
+def convert_register(hdl='Verilog'):
+    q = Signal(intbv(0)[8:])
+    d = Signal(intbv(0)[8:])
+    clk = Signal(bool(0))
+    dut = register(q, d, clk)
+    dut.convert(hdl=hdl, name="register")
+
+
+def convert_addSat(hdl='Verilog'):
+    Nbits = 16
+
+    A =Signal(intbv(0)[Nbits:])
+    B =Signal(intbv(0)[Nbits:])
+    C =Signal(intbv(0)[Nbits:])
+
+    dut = addSat(A,B,C,Nbits)
+    dut.convert(hdl=hdl, name="addSat")
 
 def main():   
     convert_srl(hdl='Verilog')
@@ -178,4 +195,6 @@ def main():
     convert_adder(hdl='Verilog')
     
 if __name__ == '__main__':
-    main()
+    #main()
+    convert_addSat()
+
