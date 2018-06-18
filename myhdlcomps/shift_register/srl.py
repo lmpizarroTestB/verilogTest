@@ -60,10 +60,10 @@ def srlpiso(clk, pi, load, so):
     return seq
  
 @block
-def ram(dout, din, addr, we, clk, depth=128):
+def ram(dout, din, addr, we, clk, Nbits=8, depth=128):
     """  Ram model """
     
-    mem = [Signal(intbv(0)[8:]) for i in range(depth)]
+    mem = [Signal(intbv(0)[Nbits:]) for i in range(depth)]
     
     @always(clk.posedge)
     def write():
@@ -95,7 +95,7 @@ def diff_disp(dout, din, clk, disp, Nbits = 8):
     
     @always(clk.posedge)
     def write():
-            dout.next = din - mem >> disp
+            dout.next = din - (mem >> disp)
             mem.next = din
     return write
 
@@ -271,7 +271,7 @@ def dff(q, d, clk):
 
 
 @block
-def register(q, d, clk):
+def register_(q, d, clk):
    ff0 = dff(q[0], d[0], clk)
    ff1 = dff(q[1], d[1], clk)
    ff2 = dff(q[2], d[2], clk)
@@ -292,6 +292,16 @@ def register(q, d, clk):
        q[6].next = d[6]
        q[7].next = d[7]
    return seq
+
+@block
+def register(q, d, clk, Nbits):
+   ffs=[dff(q[i], d[i], clk) for i in range(Nbits)]
+   @always(clk.posedge)
+   def seq():
+     for i in range (Nbits):
+         q[i].next = d[i]
+   return seq
+
 
 @block
 def addSat (A, B, C, Nbits=16):

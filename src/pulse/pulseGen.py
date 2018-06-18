@@ -1,7 +1,7 @@
 import numpy as np
 import twoCompl as twc
 
-import matplotlib.pyplot as plt
+import biggles
 
 class GenPulse:
     IMAX = 0.005
@@ -121,8 +121,15 @@ def main():
     pulse.integra()
     tw = twc.TwoCompl(16)
     #twl = tw.toFile(pulse.pulseOut, "vector.tv")
-    plt.plot (pulse.pulseOut)
-    plt.plot (tmp)
+
+    plt = biggles.FramedPlot()
+
+    time=[]
+    [time.append(i) for i in range(len(pulse.pulseOut))]
+    plt.add(biggles.Curve( time,pulse.pulseOut, color="black"))
+
+
+
     plt.show()
 
 if __name__ == "__main__":

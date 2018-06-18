@@ -29,15 +29,16 @@ def convert_srlpiso(hdl):
 
 
 def convert_ram(hdl):
-
-  dout = Signal(intbv(0)[8:])
-  dout_v = Signal(intbv(0)[8:])
-  din = Signal(intbv(0)[8:])
-  addr = Signal(intbv(0)[7:])
+  Nbits = 8
+  WidthAddr = 7
+  dout = Signal(intbv(0)[Nbits:])
+  dout_v = Signal(intbv(0)[Nbits:])
+  din = Signal(intbv(0)[Nbits:])
+  addr = Signal(intbv(0)[WidthAddr:])
   we = Signal(bool(0))
   clk = Signal(bool(0))
 
-  ramq = ram(dout, din, addr, we, clk)
+  ramq = ram(dout, din, addr, we, clk, Nbits =8, 2**WidthAddr)
   ramq.convert(hdl=hdl, name='ram')
 
 def convert_delay_1(hdl):
@@ -160,11 +161,11 @@ def convert_adder(hdl):
     dut = adder(Cin, A, B, S, Cout)
     dut.convert(hdl=hdl, name="adder")
 
-def convert_register(hdl='Verilog'):
-    q = Signal(intbv(0)[8:])
-    d = Signal(intbv(0)[8:])
+def convert_register(hdl='Verilog', Nbits=8):
+    q = Signal(intbv(0)[Nbits:])
+    d = Signal(intbv(0)[Nbits:])
     clk = Signal(bool(0))
-    dut = register(q, d, clk)
+    dut = register(q, d, clk, Nbits)
     dut.convert(hdl=hdl, name="register")
 
 
@@ -196,5 +197,5 @@ def main():
     
 if __name__ == '__main__':
     #main()
-    convert_addSat()
+    convert_register(Nbits=14)
 
