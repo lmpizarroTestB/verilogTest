@@ -1,51 +1,44 @@
 from myhdl import *
-'''
-    always, instance, Signal, \
-    ResetSignal, modbv, delay, StopSimulation, \
-    intbv, Simulation, instances, block
-'''
 import numpy as np
 import biggles
 
 
 @block
-def delay_var(dout, din, clk, delay, Nbits = 8, depth = 16):
+def test_signed(din, dout, clk, Nbits = 8):
  
-    mem = [Signal(intbv(0)[Nbits:]) for i in range(depth)]
-   
+    a1= Signal(intbv(-1, min=-2**(Nbits-1), max=2**(Nbits-1)-1)[Nbits:])
+    mem = Signal(intbv(0, min=-2**(Nbits-1), max=2**(Nbits-1)-1)[Nbits:])
     
     @always(clk.posedge)
     def delay_v():
-      dout.next = mem[delay]
-      for i in range(delay):
-          mem[i+1].next = mem[i]
-      mem[0].next = din
+      
+      dout.next = a1*mem 
+      mem.next = din.signed()
     return delay_v
 
 
-class Delay():
+class TestSigned():
 
   def __init__(self, Nbits=16, Ndelay=4):
     self.Nbits = Nbits
-    self.Ndelay = Ndelay
-    self.depth = 2**self.Ndelay
 
 
-    self.din = Signal(intbv(0)[self.Nbits:])
-    self.dout = Signal(intbv(0)[self.Nbits:])
-    self.dout2 = Signal(intbv(0)[self.Nbits:])
+    
+    self.sMin =-2**(Nbits-1)
+    self.sMax = 2**(Nbits-1)-1
+
+    self.din = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
+    self.dout = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
+    
     
     self.clk  = Signal(bool(0))
-    self.delay = Signal(intbv(0)[self.Ndelay:])
 
     self.ddout=[]
-    self.dut = delay_var(self.dout,  
-                             self.din, 
+    self.dut = test_signed(self.din,  
+                             self.dout, 
                              self.clk,
-                             self.delay,
-                             self.Nbits,
-                             self.depth)
- 
+                             self.Nbits)
+
 
   def convert (self, hdl='Verilog', name='delay'):
     self.dut.convert(hdl=hdl, name='delayq')
@@ -58,13 +51,13 @@ class Delay():
       s=[1]*N
       [s.insert(0,0) for i in range(padinit)]
       [s.append(0) for i in range(padend)]
+      sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
       TT = np.linspace(0,TS*(N+padinit+padend), (N+padinit+padend))
-      return TT,np.asarray(s)
+      return TT,np.asarray(s), sss
 
   def tb(self, ddin):
     @instance
     def stimulus():
-      self.delay.next = 4;
       for i in range(len(ddin)):
         self.din.next  = ddin[i]
         yield self.clk.posedge
@@ -88,26 +81,34 @@ class Delay():
 
     return clockGen, monitor, self.dut, stimulus
 
+def t2comp(d):
+    c=[]
+    for e in d:
+        if e!=0:
+            e=e-65536
+        c.append(e)
+    return c
 
 def main():
   
-  disc = Delay()
+  disc = TestSigned()
   disc.convert()
-  t,ddin = disc.genSignal(100,10)
+  t,ddin, ddin2 = disc.genSignal(10,10,10)
 
-  tbr = disc.tb(ddin)
+  tbr = disc.tb(ddin2)
   sim = Simulation(tbr)
   sim.run()
 
   p = biggles.FramedPlot()
   p.yrange=-5,5
-
+  
   disc.ddout.append(0)
+  tcomp=t2comp(disc.ddout)
   p.add( biggles.Curve(t,ddin, color="blue") )
-  p.add( biggles.Curve(t,disc.ddout, color="red") )
+  p.add( biggles.Curve(t,tcomp, color="red") )
   p.show()
+  print tcomp
 
 
 if __name__ == '__main__':
     main()
-
