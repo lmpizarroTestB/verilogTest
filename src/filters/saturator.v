@@ -19,3 +19,31 @@ module saturator #(parameter Nbits = 14)
    end
   assign Q = tmp[Nbits-1:0];
 endmodule
+
+/*
+*
+* Signed Arithmetic in Verilog 2001 – Opportunities and Hazards
+* Dr. Greg Tumbush, Starkey Labs, Colorado Springs, CO
+*	
+*/
+module sat #(parameter OUT_SIZE=4) (D, Q);
+  parameter IN_SIZE = OUT_SIZE + 1; // Default is to saturate 22 bits to 21 bits
+
+  input [IN_SIZE:0] D;
+  output reg [OUT_SIZE:0] Q;
+  
+  wire [OUT_SIZE:0] max_pos = {1'b0,{OUT_SIZE{1'b1}}};
+  wire [OUT_SIZE:0] max_neg = {1'b1,{OUT_SIZE{1'b0}}};
+
+always @* begin
+  // Are the bits to be saturated + 1 the same?
+  if ((D[IN_SIZE:OUT_SIZE]=={IN_SIZE-OUT_SIZE+1{1'b0}}) ||
+      (D[IN_SIZE:OUT_SIZE]=={IN_SIZE-OUT_SIZE+1{1'b1}}))
+      
+    Q = D[OUT_SIZE:0];
+  else if (D[IN_SIZE]) // neg underflow. go to max neg
+    Q = max_neg;
+  else // pos overflow, go to max pos
+    Q = max_pos;
+  end
+endmodule
