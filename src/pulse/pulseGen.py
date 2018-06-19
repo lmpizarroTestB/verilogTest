@@ -3,13 +3,35 @@ import twoCompl as twc
 
 import biggles
 
-class GenPulse:
-    IMAX = 0.005
-    LAMBDA = 0.01
+class PMT ():
 
-    FS = 100E6 
-    VADC = 5.0
-    NBITS = 14
+  '''
+  PHOTOMULTIPLIER TUBES
+  principles & applications
+
+  Re-edited September 2002 by S-O Flyckt* and Carole Marmonier**,
+  Photonis, Brive, France
+
+  '''
+  def __init__(self, gain=4, nDynodes=10):
+     self.dynodeGain = np.ones(nDynodes)*gain
+     # current amplification
+     self.totalGain = np.multiply.reduce(self.dynodeGain)
+
+     print self.totalGain 
+
+
+
+class GenPulse:
+
+    def __init__(self, FS= 100E6):
+      self.IMAX = 0.005
+      self.LAMBDA = 0.01  
+
+      self.FS = FS 
+      self.VADC = 5.0
+      self.NBITS = 14
+
 
     def setPmtComps(self, RES=1000, CAP=1E-9):
         self.RES = RES
@@ -17,9 +39,10 @@ class GenPulse:
 
     def calcConstants(self):
         self.TAO = self.CAP * self.RES
-        self.TS = 1.0 / self.FS
-        self.NOiSE = self.LAMBDA / 100.0
-        self.RADC = np.power(2, self.NBITS)
+        self.NOiSE = self.LAMBDA / 100.0  #percent noise
+        self.RADC = np.power(2, self.NBITS)  # ADC resolution
+
+        self.TS = 1.0 / self.FS # sampling period
         self.K2 = self.CAP / self.TS
         self.K1 = self.TS * self.RES /(self.TAO  + self.TS)
 
@@ -83,6 +106,11 @@ class GenPulse:
         for i,e in enumerate(self.pulseOut):
             self.pulseOut[i] = int(self.pulseOut[i] * self.RADC / self.VADC +
                     np.random.randint(-noise,noise))
+        time=[]
+        [time.append(i) for i in range(len(self.pulseOut))]
+        return time, self.pulseOut
+
+
 
     def calcPulse(self):
         for i in range(self.RPULSE):
@@ -112,10 +140,12 @@ def main():
     #pulse.calcPulseExp()
     pulse.calcPulseTri()
     pulse.calcPmtOut()
-    pulse.calcADCOut(3)
+    time, out = pulse.calcADCOut(3)
     #pulse.differential()
+
     import copy
     tmp = copy.copy(pulse.pulseOut)
+
     #pulse.integra()
     pulse.amplifier(1.0/256.0)
     pulse.integra()
@@ -124,13 +154,10 @@ def main():
 
     plt = biggles.FramedPlot()
 
-    time=[]
-    [time.append(i) for i in range(len(pulse.pulseOut))]
-    plt.add(biggles.Curve( time,pulse.pulseOut, color="black"))
-
-
+    plt.add(biggles.Curve( time,pulse.expPulse, color="black"))
 
     plt.show()
 
 if __name__ == "__main__":
-        main()
+  #main()
+  pmt = PMT()
