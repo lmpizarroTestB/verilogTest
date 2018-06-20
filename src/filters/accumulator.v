@@ -10,7 +10,6 @@ module accumulator #(parameter Nbits = 14)
   reg signed [Nbits-1:0] accum=0;
 
 
-  //reg Y;
 
   always @(posedge CLK or posedge CLR)
   begin

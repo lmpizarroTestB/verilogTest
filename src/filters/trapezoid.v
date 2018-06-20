@@ -34,35 +34,19 @@ module trapezoid #(parameter Nbits = 14,
   input [ADDR_WIDTH - 1:0] delayK; 
 
 
-  wire signed [Nbits-1:0] Ydel;
-  wire signed [Nbits-1:0] Ydel2;
-
-  reg signed [Nbits-1:0] accum1;
-  reg signed [Nbits-1:0] accum2;
-
-  //localparam MAX_DELAY = 1 << ADDR_WIDTH;
-  //reg [ADDR_WIDTH-1:0] DelayK [MAX_DELAY:0];
-
-  //integer i;
-
-  
+  wire signed [Nbits-1:0] Ydk;
+  wire signed [Nbits-1:0] Ydl;
+  wire signed [Nbits-1:0] Rn;
 
   delaySubstract  #(.Nbits(Nbits), .ADDR_WIDTH(ADDR_WIDTH)) DUT1 
-           (.X(X), .Y(Ydel), .delay(delayK), .clk(clk), .sclk(sclk), .clr(clr));
+           (.X(X), .Y(Ydk), .delay(delayK), .clk(clk), .sclk(sclk), .clr(clr));
+
   delaySubstract  #(.Nbits(Nbits), .ADDR_WIDTH(ADDR_WIDTH)) DUT2 
-         (.X(Ydel), .Y(Ydel2), .delay(delayL), .clk(clk), .sclk(sclk), .clr(clr));
-
-  assign Y = accum2;
-
-  always @(posedge clk)
-  begin
-     if (clr) begin
-	accum1 = 0;
-	accum2 = 0;
-     end
-
-     accum1 = accum1 + (m2 * Ydel2);
-     accum2 = accum2 + accum1 + (m1 *Ydel2);
-  end
-
+                  (.X(Ydk), .Y(Ydl), .delay(delayL), .clk(clk), .sclk(sclk), .clr(clr));
+     
+  hpd             #(.Nbits(Nbits)) hpd1
+                  (.X(Ydl), .Y(Rn), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
+  
+  accumS          #(.Nbits(Nbits)) acc1 
+                  (.clk(sclk), .D(Rn), .Q(Y), .clr(clr));
 endmodule

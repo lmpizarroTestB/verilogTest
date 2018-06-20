@@ -16,25 +16,13 @@ reg signed [Nbits:0] tmp;
   assign C = tmp[Nbits-1:0];
 endmodule
 
+module twocomplement #(parameter Nbits=4)(A,B);
 
-module addSB #(parameter Nbits=4)(A,B,C);
-input [Nbits-1:0] A, B;
-output [Nbits-1:0] C;
+input signed [Nbits-1:0] A;
+output signed [Nbits-1:0] B;
 
+assign B =(~A) + 1;
 
-reg [Nbits:0] tmp;
-
- always @(A,B)
-  begin
-    tmp=A+B;
-      if (A[3] == B[3])
-	 if (tmp[3]!=B[3])
-	    if (tmp[3]==1'b0)
-	         tmp=5'b01000;
-	         else
-	         tmp=5'b00111;
-  end
-  assign C = tmp[3:0];
 endmodule
 
 module accumS #(parameter Nbits=4) (clk, D, Q, clr);
@@ -58,3 +46,25 @@ always @(posedge clk)
   end
 
 endmodule
+
+
+module addSB #(parameter Nbits=4)(A,B,C);
+input [Nbits-1:0] A, B;
+output [Nbits-1:0] C;
+
+
+reg [Nbits:0] tmp;
+
+ always @(A,B)
+  begin
+    tmp=A+B;
+      if (A[3] == B[3])
+	 if (tmp[3]!=B[3])
+	    if (tmp[3]==1'b0)
+	         tmp=5'b01000;
+	         else
+	         tmp=5'b00111;
+  end
+  assign C = tmp[3:0];
+endmodule
+

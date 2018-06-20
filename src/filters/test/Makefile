@@ -16,6 +16,19 @@ N_DELAYK = delayK
 D_DELAYSUBS = ./tb_delaySubtract.v ../delaySubstract.v ../delayK.v
 N_DELAYSUBS = delaySubstract
 
+D_HPD = ./tb_hpd.v ../hpd.v ../mathFilters.v
+N_HPD = hpd
+
+D_ADDS = ./tb_addS.v ../mathFilters.v
+N_ADDS = addS
+
+D_ACCUMS = ./tb_accumS.v ../mathFilters.v
+N_ACCUMS = accumS
+
+D_TRAPEZ = ./tb_trapezoide.v ../mathFilters.v  ../trapezoid.v  ../hpd.v  ../delaySubstract.v ../delayK.v
+N_TRAPEZ = trapezoide
+
+
 
 $(N_ACCUMULATOR): $(D_ACCUMULATOR)
 	$(CC) -o $(N_ACCUMULATOR).sim $(D_ACCUMULATOR)
@@ -32,6 +45,23 @@ $(N_DELAYK): $(D_DELAYK)
 $(N_DELAYSUBS): $(D_DELAYSUBS)
 	$(CC) $(FLAGS) -o $(N_DELAYSUBS).sim $(D_DELAYSUBS)
 	vvp $(N_DELAYSUBS).sim
+
+$(N_HPD): $(D_HPD)
+	$(CC) $(FLAGS) -o $(N_HPD).sim $(D_HPD)
+	vvp $(N_HPD).sim
+
+$(N_ADDS): $(D_ADDS)
+	iverilog -o $(N_ADDS).sim $(D_ADDS)
+	./$(N_ADDS).sim
+
+$(N_ACCUMS): $(D_ACCUMS)
+	iverilog -o $(N_ACCUMS).sim $(D_ACCUMS)
+	./$(N_ACCUMS).sim
+
+
+$(N_TRAPEZ): $(D_TRAPEZ)
+	iverilog -o $(N_TRAPEZ).sim $(D_TRAPEZ)
+	./$(N_TRAPEZ).sim
 
 clean:
 	rm *.sim *.vcd
