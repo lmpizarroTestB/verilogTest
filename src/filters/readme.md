@@ -46,3 +46,46 @@ verilog two complement
 
 
 [Arithmetic Circuits & Multipliers](http://web.mit.edu/6.111/www/f2016/handouts/L08_4.pdf)
+
+[Status of digital electronics at JYFL Pete Jones](https://www.slideserve.com/molimo/status-of-digital-electronics-at-jyfl)
+
+[single pole high pass digital filter](http://sip.cua.edu/res/docs/courses/ee515/chapter04/ch4-5.pdf)
+
+
+digital pulse processing nuclear instrumentation
+[Digital pulse processing for NaI(Tl) detectors](https://experts.umich.edu/en/publications/digital-pulse-processing-for-naitl-detectors)
+[Real Time Algorithms for Digital Pulse Processing Applied to Gamma-Ray and Hard X-Ray Spectroscopy](http://www.euro-fusionscipub.org/wp-content/uploads/2014/11/EFDC110303.pdf)
+
+[dc removal from signal digital](https://www.embedded.com/design/configurable-systems/4007653/DSP-Tricks-DC-Removal)
+
+[Digitally Removing a DC Offset: DSP Without Mathematics](https://www.xilinx.com/support/documentation/white_papers/wp279.pdf)
+
+[FPGA Implementation Of A Digital Pulse Processing Algorithm For Baggage And Cargo Scanning](https://www.nutaq.com/blog/fpga-implementation-digital-pulse-processing-algorithm-baggage-and-cargo-scanning)
+
+[Digital Signal Processing for segmented HPGe Detectors Preprocessing Algorithms and Pulse Shape Analysis](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.848.3804&rep=rep1&type=pdf)
+
+[TNT Digital Pulse Processor](https://www.researchgate.net/publication/3139844_TNT_digital_pulse_processor)
+
+[LEONARDO ABBENE](https://www.unipa.it/persone/docenti/a/leonardo.abbene/en/?pagina=pubblicazioni)
+
+[A digital approach for real time high-rate high-resolution radiation measurements](https://iris.unipa.it/retrieve/handle/10447/100377/135000/G.Gerardi_L.Abbene_NIMA_2014.pdf)
+
+[X-Ray_Spectroscopy Abbene](http://www.issp.ac.ru/ebooks/books/open/X-Ray_Spectroscopy.pdf)
+
+
+[High-rate dead-time corrections in a general purpose digital pulse processing system](https://pdfs.semanticscholar.org/640c/fe927ac9adabbc6b661d56cf317d48fda0b5.pdf)
+
+
+[Parallel Processing Method for High Speed Real Time Digital Pulse Processing for Gamma-Ray Spectroscopy](https://pdfs.semanticscholar.org/3535/16998984224119542c60268c156da603b6f8.pdf)
+
+[Some digital techniques for real-time processing of pulses from radiation detectors.](https://deepblue.lib.umich.edu/handle/2027.42/129275)
+
+[Digital techniques for real-time pulse shaping in radiation measurements](https://www.sciencedirect.com/science/article/pii/0168900294916527)
+
+[Baseline restoration technique based on symmetrical zero-area trapezoidal pulse shaper](https://www.sciencedirect.com/science/article/pii/S0168900217304011)
+
+(Amplifiers )[http://www.if.ufrj.br/~toni/amptut.pdf]
+
+(Amplifiers II)[https://www.ortec-online.com/-/media/ametekortec/other/amplifier-introduction.pdf?la=en]
+
+(ortec catalog)[https://www.ortec-online.com/-/media/ametekortec/catalog%20files/modular%20electronics.pdf?la=en]
