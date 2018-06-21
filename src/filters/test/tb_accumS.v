@@ -25,10 +25,10 @@ accumS  #(.Nbits(nbits)) DUT (.clk(clk), .D(a), .Q(c), .clr(clr));
     #10 clr = 1;
     #10 clr = 0;
     #10 clr = 0; a=100;
-    for (i=0; i< 210; i = i+ 1)
+    for (i=0; i< 10; i = i+ 1)
        #10 clr = 0;
-    #10 clr = 0; a=0;
-    for (i=0; i< 110; i = i+ 1)
+    #10 clr = 0; a=-100;
+    for (i=0; i< 10; i = i+ 1)
        #10 clr = 0;
 
 

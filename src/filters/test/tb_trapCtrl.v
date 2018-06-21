@@ -1,29 +1,34 @@
 `timescale 1ns/1ps
 
-module tb_delaySubstract();
+module tb_trapCtrl();
  
   reg signed [15:0] x;
-  reg signed [15:0] m1;
-  reg signed [15:0] m2;
+  wire signed [31:0] out;
+
+  reg signed [7:0] m1;
+  reg signed [7:0] m2;
 
   reg signed [7:0] delayK;
   reg signed [7:0] delayL;
-  wire signed  [15:0] out;
   reg clk, sclk; 
   reg clr;
+
+  reg [15:0] data;
+  reg c, w;
+
   integer i;
   reg delay;
 
-  trapezoid  #(.Nbits(16)) DUT (.X(x), .Y(out), .delayK(delayK), .delayL(delayL), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
+  trapCtrl  #(.Nbits(16)) DUT (.data(data), .c(c), .w(w), .X(x), .Y(out),  .clk(clk), .sclk(sclk), .clr(clr));
 
   
   initial begin
     $dumpfile("simple.vcd");
     $monitor ("time %g   x %d   y %d    clr %b %d",$time, x, out,  clr,i);
     $dumpvars(0, DUT);
-    m1 = 10;
-    m2 = 1;
-    delayK = 10;
+    m1 = 3;
+    m2 = 5;
+    delayK = 6;
     delayL = 5;
     #200 x=13'd0; clr=0;
     #200 x=13'd0; clr=1;
@@ -38,10 +43,8 @@ module tb_delaySubstract();
     #200 x=0; $display("%d   %d ",x, out, delay);
     #200 x= 0; $display("%d   %d ",x, out);
     #200 x= 1000; $display("%d   %d ",x, out, delay);
-    for (i=0; i<100; i=i+1)
-        #200 x= x/1.5; 
-    for (i=0; i<100; i=i+1)
-        #200 x= 0; 
+    for (i=0; i<200; i=i+1)
+        #200 x= x/1.01; 
 
 
     $finish;

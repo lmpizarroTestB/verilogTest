@@ -1,4 +1,4 @@
-module trapCtrol  (data, clk, clr, c,w, X, Y, sclk);
+module trapCtrl  (data, clk, clr, c,w, X, Y, sclk);
 
 localparam Nbits = 16;
 

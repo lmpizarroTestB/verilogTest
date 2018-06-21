@@ -14,7 +14,7 @@ module delayK #(parameter Nbits = 14,
   input [ADDR_WIDTH - 1:0] delay; 
 
   localparam MAX_DELAY = 1 << ADDR_WIDTH;
-  reg [NbitsDelay-1:0] DelayK [MAX_DELAY:0];
+  reg [Nbits-1:0] DelayK [MAX_DELAY:0];
 
   integer i;
 

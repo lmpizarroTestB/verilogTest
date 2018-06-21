@@ -19,16 +19,15 @@ module trapezoid #(parameter Nbits = 14,
                 parameter ADDR_WIDTH = 8
                 )(X, Y, delayK, delayL, m1, m2, clk, sclk, clr);
 
-
   input clk;
   input clr;
   input sclk;
 
   input signed [Nbits-1:0] X;
-  input signed [Nbits-1:0] m1;
-  input signed [Nbits-1:0] m2;
+  input signed [7:0] m1;
+  input signed [7:0] m2;
 
-  output signed [Nbits-1:0] Y;
+  output signed [2*Nbits-1:0] Y;
 
   input [ADDR_WIDTH - 1:0] delayL; 
   input [ADDR_WIDTH - 1:0] delayK; 
@@ -36,7 +35,7 @@ module trapezoid #(parameter Nbits = 14,
 
   wire signed [Nbits-1:0] Ydk;
   wire signed [Nbits-1:0] Ydl;
-  wire signed [Nbits-1:0] Rn;
+  wire signed [2*Nbits-1:0] Rn;
 
   delaySubstract  #(.Nbits(Nbits), .ADDR_WIDTH(ADDR_WIDTH)) DUT1 
            (.X(X), .Y(Ydk), .delay(delayK), .clk(clk), .sclk(sclk), .clr(clr));
@@ -44,9 +43,9 @@ module trapezoid #(parameter Nbits = 14,
   delaySubstract  #(.Nbits(Nbits), .ADDR_WIDTH(ADDR_WIDTH)) DUT2 
                   (.X(Ydk), .Y(Ydl), .delay(delayL), .clk(clk), .sclk(sclk), .clr(clr));
      
-  hpd             #(.Nbits(Nbits)) hpd1
-                  (.X(Ydl), .Y(Rn), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
+  hpd             #(.Nbits(2*Nbits)) hpd1
+                  (.X({{16{1'b0}},Ydl}), .Y(Rn), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
   
-  accumS          #(.Nbits(Nbits)) acc1 
+  accumS          #(.Nbits(2*Nbits)) acc1 
                   (.clk(sclk), .D(Rn), .Q(Y), .clr(clr));
 endmodule

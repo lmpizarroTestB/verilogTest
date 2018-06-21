@@ -21,6 +21,6 @@ module delaySubstract #(parameter Nbits = 14,
   
 
   delayK  #(.Nbits(Nbits), .ADDR_WIDTH(ADDR_WIDTH)) DUT (.X(X), .Y(Ydel), .clk(clk), .sclk(sclk), .clr(clr), .delay(delay));
-  assign Y = X - (Ydel>>>1);
+  assign Y = X - Ydel;
 
 endmodule
