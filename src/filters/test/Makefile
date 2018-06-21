@@ -28,6 +28,9 @@ N_ACCUMS = accumS
 D_TRAPEZ = ./tb_trapezoide.v ../mathFilters.v  ../trapezoid.v  ../hpd.v  ../delaySubstract.v ../delayK.v
 N_TRAPEZ = trapezoide
 
+D_TRAPCTRL = ./tb_trapCtrl.v ../mathFilters.v  ../trapezoid.v  ../hpd.v  ../delaySubstract.v ../delayK.v ../trapCtrl.v
+N_TRAPCTRL = trapCtrl
+
 
 
 $(N_ACCUMULATOR): $(D_ACCUMULATOR)
@@ -62,6 +65,11 @@ $(N_ACCUMS): $(D_ACCUMS)
 $(N_TRAPEZ): $(D_TRAPEZ)
 	iverilog -o $(N_TRAPEZ).sim $(D_TRAPEZ)
 	./$(N_TRAPEZ).sim
+
+$(N_TRAPCTRL): $(D_TRAPCTRL)
+	iverilog -o $(N_TRAPCTRL).sim $(D_TRAPCTRL)
+	./$(N_TRAPCTRL).sim
+
 
 clean:
 	rm *.sim *.vcd
