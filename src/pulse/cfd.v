@@ -33,6 +33,50 @@ module DELAY(X, Y, clk, delay, clr);
     end
 endmodule
 
+module zero_crossTP(X, outP, outN, clk, clr);
+input signed [15:0] X;
+output outP, outN;
+input clk, clr;
+
+reg [1:0] curr_state;
+reg [1:0]  next_state;
+
+localparam STATE_0 =2'd0,
+           STATE_1 =2'd1,
+           STATE_2 =2'd2,
+           STATE_3 =2'd3;
+
+assign outP = (curr_state == STATE_3);
+assign outN = 1'b0;
+
+always @(posedge clk)
+begin
+ if (clr) curr_state <= STATE_0;
+ else curr_state <= next_state;
+end
+
+always @(*) begin
+ case(curr_state)
+   STATE_0: begin
+    if (X>=0) next_state = STATE_1;
+    else next_state = STATE_2; 
+   end
+   STATE_1: begin
+    if (X>=0) next_state = STATE_1;
+    else next_state = STATE_2; 
+   end
+   STATE_2: begin
+    if (X>=0) next_state = STATE_3;
+    else next_state = STATE_2; 
+   end
+   STATE_3: begin
+    if (X>=0) next_state = STATE_1;
+    else next_state = STATE_2; 
+   end
+ endcase
+end
+endmodule
+
 module zero_cross(X, outP, outN, clk, clr);
 input signed [15:0] X;
 output outP, outN;
@@ -50,8 +94,8 @@ localparam STATE_0 =3'd0,
            STATE_6 =3'd6,
            STATE_7 =3'd7;
 
-assign outP = curr_state & STATE_6;
-assign outN = curr_state & STATE_5;
+assign outP = (curr_state == STATE_4);
+assign outN = (curr_state == STATE_2);
 
 always @(posedge clk)
 begin
@@ -66,30 +110,22 @@ always @(*) begin
     else next_state = STATE_3; 
    end
    STATE_1: begin
-    if (X>=0) next_state = STATE_2;
-    else next_state = STATE_5; 
+    if (X>=0) next_state = STATE_0;
+    else next_state = STATE_2; 
    end
    STATE_2: begin
-    if (X>=0) next_state = STATE_1;
-    else next_state = STATE_5;
+    if (X>=0) next_state = STATE_4;
+    else next_state = STATE_3;
    end
    STATE_3: begin
-    if (X>=0) next_state = STATE_6;
-    else next_state = STATE_4; 
+    if (X>=0) next_state = STATE_4;
+    else next_state = STATE_0; 
    end
    STATE_4: begin
-    if (X>=0) next_state = STATE_6;
-    else next_state = STATE_3; 
-   end
-   STATE_5: begin
-    if (X>=0) next_state = STATE_6;
-    else next_state = STATE_3; 
-   end
-   STATE_6: begin
     if (X>=0) next_state = STATE_1;
-    else next_state = STATE_5; 
+    else next_state = STATE_2; 
    end
-   STATE_7: begin
+   STATE_5, STATE_6, STATE_7: begin
     next_state = STATE_0;
    end
 
