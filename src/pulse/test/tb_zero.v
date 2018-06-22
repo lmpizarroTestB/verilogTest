@@ -15,19 +15,19 @@ module ACC1632(X, Y, clk, clr);
 endmodule
 
 
-module tb_trap();
+module tb_zero();
  
   reg signed [15:0] x;
   reg clk; 
-  wire outP, outN; 
+  wire outP, outN, out; 
   reg clr;
   integer i;
 
- zero_cross ZC(.X(x), .outP(outP), .outN(outN), .clk(clk), .clr(clr));
+ zero_cross ZC(.X(x), .outNP(outP), .outPN(outN), .out(out), .clk(clk), .clr(clr));
 
   initial begin
     $dumpfile("simple.vcd");
-    $monitor ("time %g   x %d   outP %b   outN %b clr %b %d",$time, x, outP,  outN, clr,i);
+    $monitor ("time %g   x %d   outNP %b   outPN %b clr %b %d",$time, x, outP,  outN, clr,i);
     $dumpvars(0,  ZC);
     #200 x=13'd0; clr=0;
     #200 x=13'd0; clr=1;
@@ -47,23 +47,54 @@ module tb_trap();
         #200 x= x/1.01; 
     for (i=0; i<100; i=i+1)
         #200 x= 0; 
-    */
     #200 x= 0;
     for (i=0; i<5; i=i+1)
-        #200 x= 16'b0111_1111_1111_1111; 
+        #200 x= 1 ; 
+
     for (i=0; i<10; i=i+1)
-        #200 x= 16'b1000_0000_0000_0000; 
+        #200 x= -1; 
     for (i=0; i<5; i=i+1)
-        #200 x=16'b0111_1111_1111_1111; 
+        #200 x=1; 
+
     for (i=0; i<10; i=i+1)
-        #200 x= 16'b1100_0000_0000_0000; 
+        #200 x=-1; 
     for (i=0; i<10; i=i+1)
-        #200 x= 16'b0100_0000_0000_0000; 
+        #200 x= 1; 
+*/
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= -1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 1; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
+     #200 x= 0; $display("time %g  %d PN %b NP %b",$time, x, outP,  outN);
 
 
     $finish;
   end
-
   always begin
        clk = 1'b0;
        forever #100 clk = ~clk; // Toggle clock every 5 ticks
