@@ -15,7 +15,6 @@ reg [7:0] cdelayL;
 reg [15:0] cm1; 
 reg [15:0] cm2;
 
-trapezoid #(.Nbits(Nbits)) trap(.X(X), .Y(Y), .delayK(cdelayK), .delayL(cdelayL), .m1(cm1), .m2(cm2), .clk(clk), .sclk(sclk), .clr(clr));
 
 
 always @(posedge clk)
