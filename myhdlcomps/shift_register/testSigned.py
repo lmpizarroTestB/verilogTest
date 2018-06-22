@@ -5,14 +5,17 @@ import biggles
 
 @block
 def test_signed(din, dout, clk, Nbits = 8):
- 
-    a1= Signal(intbv(-1, min=-2**(Nbits-1), max=2**(Nbits-1)-1)[Nbits:])
-    mem = Signal(intbv(0, min=-2**(Nbits-1), max=2**(Nbits-1)-1)[Nbits:])
     
+    min_ =-2**(Nbits-1)
+    max_ =2**(Nbits-1)-1
+    a1= Signal(intbv(-1, min=min_, max=max_)[Nbits:])
+    mem = Signal(intbv(0, min=min_, max=max_)[Nbits:])
+
     @always(clk.posedge)
     def delay_v():
       
-      dout.next = a1*mem 
+      
+      dout.signed().next = (a1.signed()*din.signed()>>1) +  (a1*mem) 
       mem.next = din.signed()
     return delay_v
 
@@ -48,12 +51,12 @@ class TestSigned():
     s.append(0)
 
   def genSignal(self, N, padinit,padend=100, TS=1):
-      s=[1]*N
+      s=[4]*N
       [s.insert(0,0) for i in range(padinit)]
       [s.append(0) for i in range(padend)]
-      sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
+      #sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
       TT = np.linspace(0,TS*(N+padinit+padend), (N+padinit+padend))
-      return TT,np.asarray(s), sss
+      return TT,np.asarray(s), s
 
   def tb(self, ddin):
     @instance
@@ -66,7 +69,7 @@ class TestSigned():
 
     @instance
     def monitor():
-      print("sig  data wll wul out sig_out ")
+      print("data  sig_out ")
       while 1:
         yield self.clk.posedge
         yield delay(1)
@@ -105,7 +108,7 @@ def main():
   disc.ddout.append(0)
   tcomp=t2comp(disc.ddout)
   p.add( biggles.Curve(t,ddin, color="blue") )
-  p.add( biggles.Curve(t,tcomp, color="red") )
+  p.add( biggles.Curve(t,disc.ddout, color="red") )
   p.show()
   print tcomp
 
