@@ -4,20 +4,26 @@ import biggles
 
 
 @block
-def test_signed(din, dout, clk, Nbits = 8):
+def test_signed(X, Y, clk, Nbits = 8):
     
     min_ =-2**(Nbits-1)
     max_ =2**(Nbits-1)-1
+
     a1= Signal(intbv(-1, min=min_, max=max_)[Nbits:])
     mem = Signal(intbv(0, min=min_, max=max_)[Nbits:])
+    yc = Signal(intbv(0, min=min_, max=max_)[Nbits:])
 
     @always(clk.posedge)
     def delay_v():
       
+      mem.next = X
       
-      dout.signed().next = (a1.signed()*din.signed()>>1) +  (a1*mem) 
-      mem.next = din.signed()
+      Y.next = yc.signed() 
     return delay_v
+
+    @always_comb
+    def rtl_acc():
+        yc = din +  (a1*mem)
 
 
 class TestSigned():
@@ -30,21 +36,20 @@ class TestSigned():
     self.sMin =-2**(Nbits-1)
     self.sMax = 2**(Nbits-1)-1
 
-    self.din = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
-    self.dout = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
+    self.X = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
+    self.Y = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
     
     
     self.clk  = Signal(bool(0))
 
     self.ddout=[]
-    self.dut = test_signed(self.din,  
-                             self.dout, 
+    self.dut = test_signed(self.X,  
+                             self.Y, 
                              self.clk,
                              self.Nbits)
 
-
-  def convert (self, hdl='Verilog', name='delay'):
-    self.dut.convert(hdl=hdl, name='delayq')
+  def convert (self, hdl='Verilog', name='signed'):
+    self.dut.convert(hdl=hdl, name='signed')
 
   def padding(self, s):
     s.insert(0,0)
@@ -54,15 +59,15 @@ class TestSigned():
       s=[4]*N
       [s.insert(0,0) for i in range(padinit)]
       [s.append(0) for i in range(padend)]
-      #sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
+      sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
       TT = np.linspace(0,TS*(N+padinit+padend), (N+padinit+padend))
-      return TT,np.asarray(s), s
+      return TT,np.asarray(s), sss
 
   def tb(self, ddin):
     @instance
     def stimulus():
       for i in range(len(ddin)):
-        self.din.next  = ddin[i]
+        self.X.next  = ddin[i]
         yield self.clk.posedge
 
       raise StopSimulation()
@@ -73,8 +78,8 @@ class TestSigned():
       while 1:
         yield self.clk.posedge
         yield delay(1)
-        print("%s     %s   " %  (int(self.din), int(self.dout)))
-        self.ddout.append(int(self.dout))
+        print("%s     %s   " %  (int(self.X), int(self.Y)))
+        self.ddout.append(int(self.Y))
 
     HALF_PERIOD = delay(10)
 
