@@ -44,7 +44,7 @@ module trapezoid #(parameter Nbits = 14,
                   (.X(Ydk), .Y(Ydl), .delay(delayL), .clk(clk), .sclk(sclk), .clr(clr));
      
   hpd             #(.Nbits(2*Nbits)) hpd1
-                  (.X({{16{1'b0}},Ydl}), .Y(Rn), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
+                  (.X({{16{Y[15]}},Ydl}), .Y(Rn), .m1(m1), .m2(m2), .clk(clk), .sclk(sclk), .clr(clr));
   
   accumS          #(.Nbits(2*Nbits)) acc1 
                   (.clk(sclk), .D(Rn), .Q(Y), .clr(clr));

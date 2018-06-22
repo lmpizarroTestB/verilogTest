@@ -10,7 +10,7 @@ module ACC(X, Y, clk, clr);
   always @(posedge clk)
   begin
     if (clr) accum <= 0;
-    else accum <= $signed(accum + {{16{1'b0}},X});
+    else accum <= $signed(accum + {{16{X[15]}},X});
   end
 endmodule
 
