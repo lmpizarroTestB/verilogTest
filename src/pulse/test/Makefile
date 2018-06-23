@@ -11,6 +11,8 @@ N_TRAP = trap
 D_ZERO = ./tb_zero.v ../cfd.v
 N_ZERO = zero
 
+D_SIMADC = ./tb_simadc.v ../simadc.v
+N_SIMADC = simadc
 
 
 all: N_TRAPCTRL N_TRAP
@@ -27,6 +29,10 @@ $(N_TRAP): $(D_TRAP)
 $(N_ZERO): $(D_ZERO)
 	iverilog -o $(N_ZERO).sim $(D_ZERO)
 	./$(N_ZERO).sim
+
+$(N_SIMADC): $(D_SIMADC)
+	iverilog -o $(N_SIMADC).sim $(D_SIMADC)
+	./$(N_SIMADC).sim
 
 
 
