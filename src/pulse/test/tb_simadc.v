@@ -6,14 +6,17 @@ module tb_simadc();
   reg clk; 
   reg [3:0] sel;
   integer i;
+  reg [13:0] val;
+  reg load;
 
- simADC ZC(.Y(x), .clk(clk), .sel(sel));
+ simADC ZC(.Y(x), .clk(clk), .sel(sel),.load(load), .val(val));
 
   initial begin
     $dumpfile("simple.vcd");
     $monitor ("time %g   y %d   sel %b ",$time, x, sel);
     $dumpvars(0,  ZC);
-    #200 sel = 1;
+    #200 sel = 1; load = 1; val=101;
+    #200; load =0;
     #200;
     #200;
     #200;
@@ -22,7 +25,7 @@ module tb_simadc();
     #200;
     #200;
     #200;
-    #200;
+    for (i=0; i <10000; i=i+1)
     #200;
     $finish;
   end
