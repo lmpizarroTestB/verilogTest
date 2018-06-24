@@ -11,7 +11,7 @@ N_TRAP = trap
 D_ZERO = ./tb_zero.v ../cfd.v
 N_ZERO = zero
 
-D_SIMADC = ./tb_simadc.v ../simadc.v
+D_SIMADC = ./tb_simadc.v ../simadc.v ../genPulse.v
 N_SIMADC = simadc
 
 
