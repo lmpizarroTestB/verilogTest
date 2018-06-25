@@ -31,7 +31,6 @@ module rand16B (Y, n, init, seed);
 output [15:0] Y;
 input n, init;
 input [15:0] seed;
-reg [31:0] tmp, outi,tmp2;
 
 reg [31:0] SN = 32'd1103515245;
 reg [31:0] next = 1;
@@ -80,6 +79,31 @@ end
 
 endmodule
 
+module lfsr16 (Y, n, init, seed);
+output [15:0] Y;
+input n, init;
+input [15:0] seed;
+reg [15:0] lfsr16; 
+
+reg tmp1, tmp2, tmp3;
+
+always @(posedge n)
+begin
+ tmp1 = lfsr16[15];
+ tmp2 = lfsr16[14];
+ tmp3 = lfsr16[3];
+ lfsr16[15:1] = lfsr16[14:0];
+ lfsr16[0] = tmp1 ^ tmp2 ^ tmp3;
+
+end
+
+assign Y = lfsr16[15:0];
+
+always @(init)
+begin
+  lfsr16[15:0] =seed;// seed[15:0];
+end
+endmodule
 
 module tb_simadc();
  
@@ -98,22 +122,26 @@ module tb_simadc();
 
   assign pass = {val[15:13], val[8:6]};//val[15:12];val[15:0]>>>12; 
 
-  rand16B r16 (.Y(val),.n(load), .init(init), .seed(seed));
+  lfsr16 r16 (.Y(val),.n(load), .init(init), .seed(seed));
   pdf pd(.X(val), .Y(rndNorm));
   initial begin
     $dumpfile("simple.vcd");
     $monitor (" %d    %d", val, rndNorm);
-    //$dumpvars(0,  ZC);
-    #200 sel = 1; load = 1; delay=255; seed=12343;
+    $dumpvars(0,  r16);
+    #200 sel = 1; load = 1; delay=255; seed=16'b1011_0000_1111_0000;
     #200 x = 1<<31;
     #200; init =0; //x=1103515245;
+    #200; init =0; //x=1103515245;
     #200; init =1; //x=1103515245;
+    #200; init =1; //x=1103515245;
+    #200; init =0; //x=1103515245;
+    #200; init =0; //x=1103515245;
 
 
-    for (i=0; i<25; i=i+1)
+    for (i=0; i<65535; i=i+1)
     begin
       #100; load =0; //x=1103515245;
-      #100; load =1; seed = val; //x=1103515245; 
+      #100; load =1; //seed = val; x=1103515245; 
     end
 
     $finish;
