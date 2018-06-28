@@ -83,3 +83,17 @@
 [xapp213 picoblaze 8-bit-microncontroller for virtex E and Spartan-II/IIE Devices]()
 [xapp293 I2C Video Peripheral Loader]()
 [Dynamic Microcontroller in an XC4000 FPGA ken chapman]()
+
+
+wishbone counter verilog
+[Wishbone compliant smart Pulse-Width Modulation (PWM) IP](http://www.diva-portal.org/smash/get/diva2:495758/fulltext01.pdf)
+
+[Verilog Wishbone Components](https://github.com/alexforencich/verilog-wishbone)
+
+[WISHBONE_Counter_IP_Core VHDL](https://github.com/INTI-CMNB/WISHBONE_Counter_IP_Core)
+
+wishbone bus skeleton bare bones
+
+wishbone builder
+[fpga libre](http://fpgalibre.sourceforge.net/)
+[How I built my first FPGA computer](https://www.isy.liu.se/edu/kurs/TSEA44/coursemtrl14/1-Intro.pdf)
