@@ -161,7 +161,7 @@ if __name__ == "__main__":
   paddi = 20
   N = 500
   amp = 16000
-  plot = True
+  plot = False
 
   delayL = 15
   delayK = 30
@@ -169,17 +169,19 @@ if __name__ == "__main__":
   Tao = 3E-6
 
   print Tao/Ts, 2**23
-  m2 =  .875 
+  m2 =  .82 
 
   M,m1 = calcM(Tao = Tao, Tclk = Ts, m2=m2)
   print "%f %f %f"%(M, m1, m2)
 
 
   amps =[160, 320, 640, 1280, 1600, 2560, 5120, 8000, 10240, 16000]
-  noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,20]
+  #noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,20]
+  noises = [20]
   max_ss = {} 
   for noi in noises:
      max_s = []
+     sum_max = 0
      for amp in amps:
        t,s = Signal(N, paddi, Ts, Tao, amp=amp)
 
@@ -191,7 +193,11 @@ if __name__ == "__main__":
 
        rn,sn = HPD(dsK, m1, m2)
        max_ = PHA(rn)
-       max_s.append(int(10000.0 * (max_ - amp)/amp)/100.0)
+       pc = int(10000.0 * (max_ - amp)/amp)/100.0
+       max_s.append(pc)
+       pc = pc*pc
+       sum_max = sum_max + pc
+     print m2, np.sqrt(sum_max)
      max_ss[str(noi)] = (max_s)
 
   for noi in noises:
@@ -205,5 +211,3 @@ if __name__ == "__main__":
     plt.show()
    except NameError:
       pass
-
-  print sn[:100]
