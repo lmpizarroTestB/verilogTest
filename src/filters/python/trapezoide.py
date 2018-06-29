@@ -1,6 +1,13 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
+try:
+  import matplotlib.pyplot as plt
+except ImportError:
+    pass
+
+'''
+[Radiation Detection and Analysis System](http://iuac.res.in/~elab/das/ppdas/ppdas.html)
+'''
 def test():
   N = 500
   d=10
@@ -44,11 +51,12 @@ def test():
   for i in range (1,Dn.shape[0]):
       sn[i] = un[i] - v_delay[i]
 
-
-  plt.plot(Dn)
-  plt.plot(v, '.', color='black')
-  plt.show()
-
+  try:
+   plt.plot(Dn)
+   plt.plot(v, '.', color='black')
+   plt.show()
+  except NameError:
+      pass
 
 def modDS(signal, delayL):
   del_  = np.zeros(delayL)
@@ -108,11 +116,15 @@ if __name__ == "__main__":
 
   t = [i for i in range(100)]
 
-  plt.plot(t, rn[:100])
-  #plt.plot(t, dsK[:100])
-  #plt.plot(t, sn[:100])
-  #plt.plot(t, rn[:100])
-  plt.show()
+  try:
+   plt.plot(t, rn[:100])
+   #plt.plot(t, dsK[:100])
+   #plt.plot(t, sn[:100])
+   #plt.plot(t, rn[:100])
+   plt.show()
+  except NameError:
+      pass
+
 
   thres = 100
   max_ = 0
