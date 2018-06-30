@@ -63,7 +63,7 @@ def PHA(rn, thres=100):
      if rn[i] > thres:
          if rn[i] > max_:
              max_ = rn[i]
-  return np.floor(max_ / 256)
+  return np.floor(max_ )
 
 def calcM(Tao=50E-6, Tclk=1E-8, m2=1):
     M= 1 / (np.exp(Tclk/Tao) - 1)
@@ -97,7 +97,7 @@ def calcAmps(amps, m2, Tao):
   max_s = []
   sum_max = 0
 
-  noi= 0
+  noi= 1
 
 
   M,m1 = calcM(Tao = Tao, Tclk = Ts, m2=m2)
@@ -111,7 +111,7 @@ def calcAmps(amps, m2, Tao):
     spz = poleZero(snoise, Tao, Ts)
     rn,sn = trapez(spz, m1, m2)
 
-    max_ = PHA(rn)
+    max_ = PHA(sn)
     max_s.append(max_)
 
   return m1, np.asarray(max_s)
@@ -145,11 +145,12 @@ def main1():
   #amps = np.random.random_integers(160, 160*100, 10)
   #noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,20]
 
-  Tao =50E-6
-  for m2 in np.linspace(.04, 0.06, 20):
+  Tao =10E-6
+  for m2 in np.linspace(0.25, 0.380, 20):
     m1, max_s = calcAmps(amps, m2, Tao)
-    devs = calcDevs(amps, max_s)
-    print m1, m2, devs 
+    devs = calcDevs(amps, max_s/4492)
+    print m1, m2, devs
+    #print np.floor(max_s/4492)
 
 def main50():
     amp =8000
@@ -164,10 +165,31 @@ def main50():
 
     spz = poleZero(snoise, Tao, Ts)
     rn,sn = trapez(spz, m1, m2)
-    max_ = PHA(rn)
+    max_ = PHA(sn)
 
     print rn[0:100]
 
     print max_
+
+def main10():
+    amp =2000
+    Tao =10E-6
+    Ts = 1E-8
+    m1 = 297
+    m2 = 0.297 #0.0515
+    noi = 0
+
+    t,s = Signal(Ts, Tao, amp=amp)
+    snoise = noise(s,noi)
+
+    spz = poleZero(snoise, Tao, Ts)
+    rn,sn = trapez(spz, m1, m2)
+    max_ = PHA(sn)
+
+    print np.floor(sn[0:100] / m1)
+
+    print max_/4492
+
+
 if __name__ == "__main__":
-    main50()
+    main10()
