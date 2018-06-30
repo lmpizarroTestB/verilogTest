@@ -153,7 +153,7 @@ def main1():
     #print np.floor(max_s/4492)
 
 def main50():
-    amp =8000
+    amp =16000
     Tao =50E-6
     Ts = 1E-8
     m1 = 256
@@ -172,7 +172,7 @@ def main50():
     print max_
 
 def main10():
-    amp =2000
+    amp =16385
     Tao =10E-6
     Ts = 1E-8
     m1 = 297
@@ -186,10 +186,15 @@ def main10():
     rn,sn = trapez(spz, m1, m2)
     max_ = PHA(sn)
 
-    print np.floor(sn[0:100] / m1)
+    print np.floor(sn[0:100])
 
-    print max_/4492
+    print max_
 
+    import biggles
+    p = biggles.FramedPlot()
+    p.add( biggles.Curve(np.arange(sn.shape[0])[20:70], sn[20:70], color='blue'))
+    p.add(biggles.Slope( 0, color='green' ))
+    p.show()
 
 if __name__ == "__main__":
     main10()
