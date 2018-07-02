@@ -6,25 +6,31 @@ import biggles
 @block
 def test_signed(X, Y, clk, Nbits = 8):
     
-    min_ =-2**(Nbits-1)
-    max_ =2**(Nbits-1)-1
+    min_1 =-2**(Nbits-1)
+    max_1 =-min_1
 
-    a1= Signal(intbv(-1, min=min_, max=max_)[Nbits:])
-    mem = Signal(intbv(0, min=min_, max=max_)[Nbits:])
-    yc = Signal(intbv(0, min=min_, max=max_)[Nbits:])
+    a1= Signal(intbv(-1, min=min_1, max=max_1))
+    mem = Signal(intbv(0, min=min_1, max=max_1))
+
+
+    min_ =-2**(2*Nbits-1)
+    max_ =-min_
+
+    yc = Signal(intbv(0, min=min_, max=max_))
 
     @always(clk.posedge)
     def delay_v():
-      
-      mem.next = X
-      
-      Y.next = yc.signed() 
-    return delay_v
+      if (clk): 
+       mem.next = X
+       Y.next = yc.signed() 
 
     @always_comb
     def rtl_acc():
-        yc = din +  (a1*mem)
+       yc = X -  (a1*mem>>1)
+      
 
+
+    return delay_v, rtl_acc
 
 class TestSigned():
 
@@ -34,10 +40,16 @@ class TestSigned():
 
     
     self.sMin =-2**(Nbits-1)
-    self.sMax = 2**(Nbits-1)-1
+    self.sMax = -self.sMin
 
     self.X = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
-    self.Y = Signal(intbv(0, min=self.sMin, max=self.sMax)[self.Nbits:])
+
+    Nbits = 2*Nbits
+    
+    sMin =-2**(Nbits-1)
+    sMax = -sMin
+    print ("%d %d")%(sMin, sMax)
+    self.Y = Signal(intbv(0, min=sMin, max=sMax)[2*self.Nbits:])
     
     
     self.clk  = Signal(bool(0))
@@ -56,12 +68,12 @@ class TestSigned():
     s.append(0)
 
   def genSignal(self, N, padinit,padend=100, TS=1):
-      s=[4]*N
-      [s.insert(0,0) for i in range(padinit)]
-      [s.append(0) for i in range(padend)]
-      sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
-      TT = np.linspace(0,TS*(N+padinit+padend), (N+padinit+padend))
-      return TT,np.asarray(s), sss
+    s=[4]*N
+    [s.insert(0,0) for i in range(padinit)]
+    [s.append(0) for i in range(padend)]
+    sss = [Signal(intbv(s[i], min=self.sMin, max=self.sMax)[self.Nbits:]) for i in range(len(s))]
+    TT = np.linspace(0,TS*(N+padinit+padend), (N+padinit+padend))
+    return TT,np.asarray(s), sss
 
   def tb(self, ddin):
     @instance
@@ -78,7 +90,7 @@ class TestSigned():
       while 1:
         yield self.clk.posedge
         yield delay(1)
-        print("%s     %s   " %  (int(self.X), int(self.Y)))
+        print("%s     %s   " % (int(self.X), int(self.Y)))
         self.ddout.append(int(self.Y))
 
     HALF_PERIOD = delay(10)

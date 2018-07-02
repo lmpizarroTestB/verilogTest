@@ -196,5 +196,153 @@ def main10():
     p.add(biggles.Slope( 0, color='green' ))
     p.show()
 
+
+def lessThanZeroToHex(n=.90003):
+
+  ang=[np.power(16.0,-i) for i in range(1,5)]
+  nc=0
+  for e in ang:
+    a= n/e
+    b = int(a)
+    #print b, bin(b)[2:]
+    n=(a-b)*e
+    nc = nc + b*e
+
+  return nc
+
+def testLTZ():
+    nl=[.9,.99,.999,.9999,.99999]
+    for n in nl:
+      nc = lessThanZeroToHex(n=n)
+      print nc, n, nc*16384, n*16384
+
+import math
+def test2LTZ():
+    ml =[0]*20
+    ml.extend([1000]*100)
+    ml.extend([0]*10)
+    t=[i for i in range(len(ml))]
+
+    nc = lessThanZeroToHex(n=.5)
+    nc_x = lessThanZeroToHex(n=.99999)
+    mem_y = 0
+    mem_x = 0
+    o=[]
+    for m in ml:
+        err = int(m + math.floor(nc*mem_y) - math.floor(nc_x*mem_x))
+        mem_y = err
+        mem_x = m
+        o.append(err)
+    return ml, o,t
+
+
+def test3LTZ(s, att=.56):
+
+    nc = lessThanZeroToHex(n=.75)
+    c = lessThanZeroToHex(n=att)
+
+    mem_y = 0
+    o=[]
+    for m in s:
+        y = int(m + math.floor(nc*mem_y))
+        mem_y = y
+        o.append(math.floor(c*y))
+    return o
+
+
+
+def f1():
+  in_, out1, t = test2LTZ()
+  out2 = test3LTZ(out1, .65)
+  out3 = test3LTZ(out2, .5)
+  out4 = test3LTZ(out3, .5)
+  out5 = test3LTZ(out4, .45)
+  out6 = test3LTZ(out5, .45)
+
+def draw(t, in_, out):
+
+  import biggles
+
+  p = biggles.FramedPlot()
+  p.add( biggles.Curve(t, out, color='blue'))
+  p.add( biggles.Curve(t, in_, color='red'))
+  p.add(biggles.Slope( 0, color='green' ))
+  p.show()
+
+
+def int_1(s):
+    nc = lessThanZeroToHex(n=.2)
+    c = lessThanZeroToHex(n=.6)
+
+    mem_y = 0
+    mem_x = 0
+    o=[]
+    for m in s:
+        y = int(nc*m + nc*mem_x + math.floor(c*mem_y))
+        mem_y = y
+        mem_x = m
+        o.append(math.floor(y))
+    return o
+
+def int_2(s):
+    b1 = lessThanZeroToHex(n=.1)
+    b2 = lessThanZeroToHex(n=.01)
+    b3 = lessThanZeroToHex(n=.92)
+    b4 = lessThanZeroToHex(n=.02)
+
+    mem_y2 = 0
+    mem_y1 = 0
+    mem_x2 = 0
+    mem_x1 = 0
+    o=[]
+    for m in s:
+        y = int(m - b1*mem_x1 + b2*mem_x2 + math.floor(b3*mem_y1) - b4*mem_y2)
+        mem_y2 = mem_y1
+        mem_x2 = mem_x1
+        mem_y1 = y
+        mem_x1 = m
+        o.append(math.floor(y))
+    return o
+
+
+
+
+def cross_zero(s):
+    nc = lessThanZeroToHex(n=.2)
+    c = lessThanZeroToHex(n=.6)
+
+    mem_y = 0
+    mem_x = 0
+    o=[]
+    for m in s:
+        y = 3*(nc*m - nc*mem_x ) - int(nc*m + nc*mem_x + math.floor(c*mem_y))
+        mem_y = y
+        mem_x = m
+        o.append(math.floor(y))
+    return o
+
+def cross_zero2(s):
+    nc = lessThanZeroToHex(n=.8)
+
+    mem_y = 0
+    mem_x = 0
+    o=[]
+    for m in s:
+        y = int(m - mem_x + math.floor(nc*mem_y))
+        mem_y = y
+        mem_x = m
+        o.append(math.floor(y))
+    return o
+
+
+
+
+def f2():
+  in_, out1, t = test2LTZ()
+  out2 = int_2(out1)
+  out3 = cross_zero2(out2)
+  return t, in_, out3
+
 if __name__ == "__main__":
-    main10()
+    t, in_, o=f2()
+    draw(t,o, o)
