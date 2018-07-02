@@ -39,6 +39,21 @@ y(n) = a0 * x(n) + a1 * x(n-1) + a2 * x(n-2) - b1 * y(n-1) - b2 * y(n-2)
 http://scipy-cookbook.readthedocs.io/items/ButterworthBandpass.html
 
 '''
+
+def lessThanZeroToHex(n=.90003):
+
+  ang=[np.power(16.0,-i) for i in range(1,5)]
+  nc=0
+  for e in ang:
+    a= n/e
+    b = int(a)
+    #print b, bin(b)[2:]
+    n=(a-b)*e
+    nc = nc + b*e
+
+  return nc
+
+
 class Butter():
 
   def __init__(self, lowcut=1E5, highcut=20E6, fs=100E6, order=1):
@@ -47,6 +62,21 @@ class Butter():
     self.fs = fs
     self.order = order
     self.nyq = 0.5 * fs
+
+    low = self.lowcut / self.nyq
+    high = self.highcut / self.nyq
+
+    self.bband, self.aband = signal.butter(self.order, [low, high], btype='band')
+    self.blow, self.alow = signal.butter(self.order, low, btype='lowpass')
+    self.bhigh, self.ahigh = signal.butter(self.order, high, btype='highpass')
+    self.bcust, self.acust = ([1,-1],[1,1])
+
+    print "aband: ", self.bband
+    print "aband: ", self.aband
+    print "alow: ",  self.alow
+    print "alow: ", self.blow
+    print "ahigh: ", self.ahigh
+    print "ahigh: ", self.bhigh
 
   def bandpass(self):
     
@@ -57,9 +87,21 @@ class Butter():
 
 
   def bandpass_filter(self,data):
-    bband, aband = self.bandpass()
-    y = signal.lfilter(bband, aband, data)
+    y = signal.lfilter(self.bband, self.aband, data)
     return y
+
+  def highpass_filter(self,data):
+    y = signal.lfilter(self.bhigh, self.ahigh, data)
+    return y
+
+  def lowpass_filter(self,data):
+    y = signal.lfilter(self.blow, self.alow, data)
+    return y
+
+  def custom_filter(self,data):
+    y = signal.lfilter(self.bcust, self.acust, data)
+    return y
+
 
   def lowpass(self):
     low = self.lowcut / self.nyq
@@ -68,8 +110,8 @@ class Butter():
 
   def highpass(self):
     high = self.lowcut / self.nyq
-    blow, alow = signal.butter(self.order, high, btype='highpass')
-    return blow, alow
+    bhigh, ahigh = signal.butter(self.order, high, btype='highpass')
+    return bhigh, ahigh
 
 
 
@@ -223,14 +265,28 @@ def main ():
 
 def testBP():
 
-  but = Butter()
+  buth = Butter(lowcut=1E2, highcut=8E5, fs=100E6, order=1)
   t,x = signalGen(tipo='step')
-  y = but.bandpass_filter(x)
+  y = buth.highpass_filter(x)
   plt = biggles.FramedPlot()
 
-  plt.add(biggles.Curve( t,y, color="black"))
-  plt.add(biggles.Curve( t,x, color="black"))
+  butl = Butter(lowcut=6E5, highcut=30E6, fs=100E6, order=1)
+  yy = butl.lowpass_filter(y)
+  yyy = butl.lowpass_filter(3.26*yy)
+  yyyy = butl.lowpass_filter(yyy)
+  y4 = butl.lowpass_filter(2*yyyy)
+
+  butbp = Butter(lowcut=6E5, highcut=30E6, fs=100E6, order=1)
+  y5 = butbp.bandpass_filter(2*yy)
+  #plt.add(biggles.Curve( t,y, color="black"))
+  plt.add(biggles.Curve( t,yy, color="red"))
+  plt.add(biggles.Curve( t,yyy, color="black"))
+  plt.add(biggles.Curve( t,yyyy, color="green"))
+  plt.add(biggles.Curve( t,y5, color="orange"))
+  plt.add(biggles.Curve( t,y4, color="orange"))
+  plt.add(biggles.Curve( t,x, color="brown"))
   plt.show()
+  print np.max(x)
 
 if __name__ == "__main__":
         #main()

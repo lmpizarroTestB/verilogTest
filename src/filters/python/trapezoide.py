@@ -304,9 +304,6 @@ def int_2(s):
         o.append(math.floor(y))
     return o
 
-
-
-
 def cross_zero(s):
     nc = lessThanZeroToHex(n=.2)
     c = lessThanZeroToHex(n=.6)
@@ -315,14 +312,14 @@ def cross_zero(s):
     mem_x = 0
     o=[]
     for m in s:
-        y = 3*(nc*m - nc*mem_x ) - int(nc*m + nc*mem_x + math.floor(c*mem_y))
+        y = 5*(nc*m - nc*mem_x ) - int(math.floor(nc*m) + math.floor(nc*mem_x) + math.floor(c*mem_y))
         mem_y = y
         mem_x = m
         o.append(math.floor(y))
     return o
 
 def cross_zero2(s):
-    nc = lessThanZeroToHex(n=.8)
+    nc = lessThanZeroToHex(n=.65)
 
     mem_y = 0
     mem_x = 0
@@ -334,15 +331,13 @@ def cross_zero2(s):
         o.append(math.floor(y))
     return o
 
-
-
-
 def f2():
   in_, out1, t = test2LTZ()
   out2 = int_2(out1)
-  out3 = cross_zero2(out2)
-  return t, in_, out3
+  out3 = cross_zero(out2)
+  return t, out3, out3
 
 if __name__ == "__main__":
     t, in_, o=f2()
-    draw(t,o, o)
+    draw(t,in_, o)
+    print o
