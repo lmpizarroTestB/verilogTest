@@ -6,16 +6,15 @@ N_ADDER2_BB = adder2_bb
 D_ADDER4_BB = ./tb_adder4_bb.v ../accumulators.v
 N_ADDER4_BB = adder4_bb
 
+D_MULT4_BB = tb_mult4_bb.v ../multipliers.v ../accumulators.v
+N_MULT4_BB = mult4_bb
+
+
 
 adder_8: tb_adder_8.v ../accumulators.v
 	iverilog -o adder_8.sim tb_adder_8.v ../accumulators.v 
 	./adder_8.sim
 	
-
-mult4_bb: tb_mult4_bb.v ../multipliers.v ../accumulators.v
-	iverilog -o mult4_bb.sim tb_mult4_bb.v ../multipliers.v ../accumulators.v
-	./mult4_bb.sim
-
 adder: tb_adder.v ../accumulators.v
 	iverilog -o adder.sim tb_adder.v ../accumulators.v
 	./adder.sim
@@ -64,6 +63,11 @@ $(N_ADDER2_BB): $(D_ADDER2_BB)
 $(N_ADDER4_BB): $(D_ADDER4_BB)
 	iverilog -o $(N_ADDER4_BB).sim $(D_ADDER4_BB)
 	./$(N_ADDER4_BB).sim
+
+$(N_MULT4_BB): $(D_MULT4_BB)
+	iverilog -o $(N_MULT4_BB).sim $(D_MULT4_BB)
+	./$(N_MULT4_BB).sim
+
 
 
 clean:
