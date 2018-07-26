@@ -1,5 +1,5 @@
 //
-// Modulo verilog que cuando llega un logic_pulse
+// cuando llega un logic_pulse
 // genera un tag de tiempo para ese pulso y una
 // señal de arrivo de pulso/nuevo tag
 //
@@ -29,6 +29,7 @@ always @(reset)
 begin
 	timer = 0;
 	tag_time = 0;
+	new_tag = 0;
 end
 
 // Procesa el pulso nuclear 
@@ -36,13 +37,10 @@ end
 // asigna a la salida el valor que en ese momento
 // tiene el timer
 // y pone en 1(uno) la señal de que hay un nuevo tag / pulso nuclear
-always @(logic_pulse)
+always @(posedge logic_pulse)
 begin
-	if (logic_pulse & clk) 
-	begin
-		tag_time = timer;
-		new_tag = 1;
-	end
+	tag_time = timer;
+	new_tag = 1;
 end
 
 // aca se pone a 0 la senial de new_tag

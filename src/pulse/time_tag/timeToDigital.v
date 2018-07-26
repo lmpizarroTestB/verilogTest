@@ -12,8 +12,11 @@ module timeTodigital(input logic_pulse,
 wire [45:0] tag_time;
 wire new_tag;
 
-reg  [45:0] new_time;
-reg  [45:0] old_time;
+reg  [45:0] old_tag;
+
+wire sig_transfer;
+
+assign sig_transfer = ~new_tag;
 
 
 time_tags tt (.logic_pulse(logic_pulse), 
@@ -24,26 +27,20 @@ time_tags tt (.logic_pulse(logic_pulse),
 
 always @(posedge new_tag)
 begin
-   if (new_time) begin
-	new_time <= tag_time;
-   end
+    diff_time <= tag_time - old_tag;
+    new_diff = 1;
 end
 
-always @(posedge clk)
+always @(posedge sig_transfer)
 begin
-  if (~new_tag)
-  begin
-    diff_time <= new_time - old_time;
-    old_time <= new_time;
-    new_diff = 1;
-  end
+    old_tag <= tag_time;
+    new_diff = 0;
 end
 
 always @(reset)
 begin
   diff_time = 0;
-  new_time = 0;
-  old_time = 0;
+  old_tag = 0;
 end
 
 endmodule
