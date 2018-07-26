@@ -44,9 +44,6 @@ begin
      ymem = yc;
      end
 
-
-
-
   default: yc<={val,{18{1'b0}}};
  endcase
 end

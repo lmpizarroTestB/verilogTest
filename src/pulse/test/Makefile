@@ -14,7 +14,6 @@ N_ZERO = zero
 D_SIMADC = ./tb_simadc.v ../simadc.v ../genPulse.v
 N_SIMADC = simadc
 
-
 all: N_TRAPCTRL N_TRAP
 
 
@@ -33,7 +32,6 @@ $(N_ZERO): $(D_ZERO)
 $(N_SIMADC): $(D_SIMADC)
 	iverilog -o $(N_SIMADC).sim $(D_SIMADC)
 	./$(N_SIMADC).sim
-
 
 
 clean:
